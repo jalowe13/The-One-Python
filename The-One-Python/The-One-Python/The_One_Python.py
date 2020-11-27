@@ -27,7 +27,9 @@ class Character:
         print("Default Values Loaded!")
 
     def print_values(self):
-        print("Values for " + self.name + "lvl " + str(self.level))
+        print("Values for " + self.name)
+        print("Level[" + str(self.level) + "]")
+        print("Password[" + self.password + "]")
         print("HP[" + str(self.hp) + "/" + str(self.max_hp) + "]")
         print("Gold[" + str(self.gold) + "]")
         print("Bank Gold[" + str(self.bank_gold) + "]")
