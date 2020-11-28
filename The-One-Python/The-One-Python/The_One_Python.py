@@ -63,7 +63,7 @@ def create_account():
     return player
 
 
-def title():
+def main():
     p = Character("UNKNOWN", "UNKNOWN")
     title_file = open("art/" + "titleart.txt", 'r')  # Opening the file in a different directory
     print(title_file.read())
@@ -75,9 +75,11 @@ def title():
     if title_selection == '2':
         p = create_account()
         p.print_stats()
+
     if title_selection == '1':
         login(p)
         p.print_stats()
 
 
-title()
+if __name__ == "__main__":
+    main()
