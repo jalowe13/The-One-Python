@@ -1,4 +1,5 @@
 import ctypes
+import json
 
 ctypes.windll.kernel32.SetConsoleTitleA('The One')  # Setting the command prompt window opened to a specific title
 
@@ -38,7 +39,17 @@ class Character:
 
 
 def login():
-    pass
+    print("Username: ")
+    username = input()
+    print("Password: ")
+    password = input()
+    name = ''
+    value = ''
+    with open(username + ".txt", "r") as values:
+        for line in values:
+            name, value = line.replace(' ', '').strip('=')
+            print('Name: ' + name + " " + "Value: " + value)
+
 
 
 def create_account():
@@ -69,6 +80,9 @@ def title():
     title_selection = input()
     if title_selection == '2':
         p = create_account()
+        p.print_values()
+    if title_selection == '1':
+        login()
         p.print_values()
 
 
