@@ -1,6 +1,8 @@
 import os
+import random
 
 
+# Generalized Character Class for Player
 class Character:
     stats = {
         "username": "",
@@ -41,6 +43,24 @@ class Character:
             print(self.stats["username"] + " has healed " + str(hp_dif) + " HP")
             os.system("pause")
             os.system("cls")
+
+
+# Generalized Enemy Class
+class Enemy:
+    stats = {
+        "level_base": 0,
+        "gold_base": 0,
+        "exp_base": 0,
+        "hp_base": 0,
+        "dmg_base": 0
+    }
+
+    def __init__(self):
+        # Select Random Enemy File
+        enemy_path = 'data/enemies'
+        all_enemies = os.listdir(enemy_path)
+        i = random.randrange(0, len(all_enemies))
+        print(all_enemies[i])
 
 
 def login(player):
@@ -103,7 +123,7 @@ def save_file(player):
 
 
 def main():
-    version = "version 0.45 (2020-11-29) [Jacob Lowe]"
+    version = "version 0.46 (2020-11-29) [Jacob Lowe]"
     os.system("title The One [" + version + "]")
     print("This game is best in fullscreen...")
     os.system("pause")
@@ -211,6 +231,10 @@ def town(player):
 def elv_cave_enter(player):
     os.system("cls")
     print("You step into the cave")
+    Enemy()
+    Enemy()
+    Enemy()
+    Enemy()
     os.system("pause")
     os.system("cls")
     elv_cave_exit(player)
