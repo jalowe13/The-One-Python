@@ -1,6 +1,4 @@
-import ctypes
-
-ctypes.windll.kernel32.SetConsoleTitleA('The One')  # Setting the command prompt window opened to a specific title
+import os
 
 
 class Character:
@@ -34,10 +32,8 @@ class Character:
 
 
 def login(player):
-    print("Username: ")
-    username = input()
-    print("Password: ")
-    password = input()
+    username = input("Username: ")
+    password = input("Password: ")
     correct = 1
 
     try:
@@ -53,15 +49,15 @@ def login(player):
                         print("Password incorrect")
                         player.stats["password"] = "DENIED"
     except IOError as e:
+        os.system('cls')
         print("*******Save file for " + username + " not found*******")
         main()
+    return player
 
 
 def create_account():
-    print('What would you like your username to be?')
-    username = input()
-    print('What would you like your password to be?')
-    password = input()
+    username = input('What would you like your username to be?')
+    password = input('What would you like your password to be?')
 
     #   Save File Contents
     save = open(username + ".txt", "w")
@@ -75,26 +71,94 @@ def create_account():
 
 
 def main():
+    version = "version 0.4 (2020-11-28) [Jacob Lowe]"
+    os.system("title The One [" + version + "]")
+    print("This game is best in fullscreen...")
+    os.system("pause")
+    os.system("cls")
     p = Character("UNKNOWN", "UNKNOWN")
     title_file = open("art/" + "titleart.txt", 'r')  # Opening the file in a different directory
     print(title_file.read())
-    print('Current Version: v0.3_80 [Jacob Lowe]')
+    print('Python Edition ')
+    print(version)
     print('1) Login')
     print('2) Create Account')
     print('3) Exit')
-    title_selection = input()
+    title_selection = input("Selection: ")
     # Title Selection
     if title_selection == '3':
         exit(0)
 
     if title_selection == '2':
         p = create_account()
-        p.print_stats()
-
+        os.system('cls')
+        town(p)
     if title_selection == '1':
-        login(p)
-        p.print_stats()
+        p = login(p)
+        os.system('cls')
+        town(p)
 
+
+# Area One
+def town(player):
+    print(" ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»")
+    print(" º What would you like to do?  º")
+    print(".ÌÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹")
+    print(" º 1) Travel to the next town  º")
+    print(".º                             º")
+    print(" º 2) Elvendale Weapon Shop    º")
+    print(".º                             º")
+    print(" º 3) Elvendale Armor Shop     º")
+    print(".º                             º")
+    print(" º 4) Elvendale Trading Post   º")
+    print(".º                             º")
+    print(" º 5) Local Elven-dale Cave    º")
+    print(".º                             º")
+    print(" º 6) Skill Chart              º")
+    print(".º                             º")
+    print(" º 7) World Bank               º")
+    print(".º                             º")
+    print(" º 8) Quest's                  º")
+    print(".º                             º")
+    print(" º 9) Save                     º")
+    print(" º                             º")
+    print(" º 10) Heal                    º")
+    print(" º                             º")
+    print(" º 98) " + player.stats["username"] + "'s Inventory º")
+    print(" ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
+    print(".")
+    print(".")
+    print(".")
+    print(".          [" + player.stats["username"] + "]")
+    print(".               _")
+    print(".              ( )")
+    print(".               I")
+    print(".              YIY")
+    print(".               I")
+    print(".              I I")
+    print(".")
+    print(".    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»")
+    print(".    º HP=%HP% ºGold=%gold%  º")
+    print(".    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
+    print(".")
+    print(".")
+    print(".")
+    print(".")
+    print(".")
+    print(".")
+    print(".")
+    print(".")
+    print(".")
+    print(".")
+    print(".")
+    print(" ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»")
+    print("   Currently logged in as " + player.stats["username"])
+    print(".ÌÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹")
+    print(" º 99) Log out                           º")
+    print(" ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
+    print(".")
+
+    town_selection = input("Selection: ")
 
 if __name__ == "__main__":
     main()
