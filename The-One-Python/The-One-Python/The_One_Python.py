@@ -26,7 +26,7 @@ class Character:
         self.stats["flee_gold"] = 50
         self.stats["town"] = 1
         self.stats["level"] = 1
-        print("Default Values for new Character " + username + "Loaded!")
+        # print("Default Values for new Character " + username + "Loaded!") # For Loading Default Value Debug
 
     def print_stats(self):
         print("Printing Stats for User[" + self.stats["username"] + "]")
@@ -38,12 +38,23 @@ def login(player):
     username = input()
     print("Password: ")
     password = input()
-    with open(username + ".txt", "r") as values:
-        for line in values:
-            newline = line.split('=')
-            name = newline[0].rstrip()  # Removing newline characters
-            value = newline[1].rstrip()
-            player.stats[name] = value
+    correct = 1
+
+    try:
+        with open(username + ".txt", "r") as values:
+            for line in values:
+                if correct:
+                    newline = line.split('=')
+                    name = newline[0].rstrip()  # Removing newline characters
+                    value = newline[1].rstrip()
+                    player.stats[name] = value
+                    if name == "password" and value != password:
+                        correct = 0
+                        print("Password incorrect")
+                        player.stats["password"] = "DENIED"
+    except IOError as e:
+        print("*******Save file for " + username + " not found*******")
+        main()
 
 
 def create_account():
@@ -72,6 +83,10 @@ def main():
     print('2) Create Account')
     print('3) Exit')
     title_selection = input()
+    # Title Selection
+    if title_selection == '3':
+        exit(0)
+
     if title_selection == '2':
         p = create_account()
         p.print_stats()
