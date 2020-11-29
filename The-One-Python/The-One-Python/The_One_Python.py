@@ -9,6 +9,7 @@ class Character:
         "max_hp": 0,
         "gold": 0,
         "bank_gold": 0,
+        "heal_gold": 0,
         "flee_gold": 0,
         "town": 1,
         "level": 1
@@ -21,14 +22,22 @@ class Character:
         self.stats["max_hp"] = 100
         self.stats["gold"] = 25
         self.stats["bank_gold"] = 0
+        self.stats["heal_gold"] = 20
         self.stats["flee_gold"] = 50
         self.stats["town"] = 1
         self.stats["level"] = 1
         # print("Default Values for new Character " + username + "Loaded!") # For Loading Default Value Debug
 
-    def print_stats(self):
+    def print_stats(self):  # Prints out stats of the character
         print("Printing Stats for User[" + self.stats["username"] + "]")
         print(self.stats)
+
+    def heal(self):  # Healing condition to self heal when called when the right amount of heal gold is met
+        if self.stats["gold"] >= self.stats["heal_gold"]:
+            hp_dif = self.stats["hp"] - self.stats["max_hp"]
+            self.stats["gold"] = self.stats["gold"] - self.stats["heal_gold"]
+            self.stats["hp"] = self.stats["max_hp"]
+            print(self.stats["username"] + " has healed " + str(hp_dif) + " HP" )
 
 
 def login(player):
@@ -138,7 +147,7 @@ def town(player):
     print(".              I I")
     print(".")
     print(".    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»")
-    print(".    º HP=%HP% ºGold=%gold%  º")
+    print(".    º HP[" + str(player.stats["hp"]) + "] ºGold[" + str(player.stats["gold"]) + "] º")
     print(".    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
     print(".")
     print(".")
@@ -157,8 +166,16 @@ def town(player):
     print(" º 99) Log out                           º")
     print(" ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
     print(".")
-
     town_selection = input("Selection: ")
+
+    #   Selection statements
+    if town_selection == '10':
+        player.heal()
+    else:
+        os.system('cls')
+        print("Command not found")
+        town(player)
+
 
 if __name__ == "__main__":
     main()
