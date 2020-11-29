@@ -37,7 +37,10 @@ class Character:
             hp_dif = self.stats["hp"] - self.stats["max_hp"]
             self.stats["gold"] = self.stats["gold"] - self.stats["heal_gold"]
             self.stats["hp"] = self.stats["max_hp"]
-            print(self.stats["username"] + " has healed " + str(hp_dif) + " HP" )
+            os.system("cls")
+            print(self.stats["username"] + " has healed " + str(hp_dif) + " HP")
+            os.system("pause")
+            os.system("cls")
 
 
 def login(player):
@@ -55,8 +58,10 @@ def login(player):
                     player.stats[name] = value
                     if name == "password" and value != password:
                         correct = 0
+                        os.system("cls")
                         print("Password incorrect")
                         player.stats["password"] = "DENIED"
+                        main()
     except IOError as e:
         os.system('cls')
         print("*******Save file for " + username + " not found*******")
@@ -65,8 +70,8 @@ def login(player):
 
 
 def create_account():
-    username = input('What would you like your username to be?')
-    password = input('What would you like your password to be?')
+    username = input('What would you like your username to be?: ')
+    password = input('What would you like your password to be?: ')
 
     #   Save File Contents
     save = open(username + ".txt", "w")
@@ -79,8 +84,26 @@ def create_account():
     return player
 
 
+# Saving file in town
+def save_file(player):
+    #   Save File Contents Of All Stats
+    new_save = open(player.stats["username"] + ".txt", "w")
+    new_save.write("username=" + player.stats["username"] + "\n")
+    new_save.write("password=" + player.stats["password"] + "\n")
+    new_save.write("hp=" + str(player.stats["hp"]) + "\n")
+    new_save.write("max_hp=" + str(player.stats["max_hp"]) + "\n")
+    new_save.write("gold=" + str(player.stats["gold"]) + "\n")
+    new_save.write("bank_gold=" + str(player.stats["bank_gold"]) + "\n")
+    new_save.write("heal_gold=" + str(player.stats["heal_gold"]) + "\n")
+    new_save.write("flee_gold=" + str(player.stats["flee_gold"]) + "\n")
+    new_save.write("town=" + str(player.stats["town"]) + "\n")
+    new_save.write("level=" + str(player.stats["level"]) + "\n")
+    print("Saved")
+    return player
+
+
 def main():
-    version = "version 0.4 (2020-11-28) [Jacob Lowe]"
+    version = "version 0.45 (2020-11-29) [Jacob Lowe]"
     os.system("title The One [" + version + "]")
     print("This game is best in fullscreen...")
     os.system("pause")
@@ -103,9 +126,9 @@ def main():
         os.system('cls')
         town(p)
     if title_selection == '1':
-        p = login(p)
+        loaded_player = login(p)
         os.system('cls')
-        town(p)
+        town(loaded_player)
 
 
 # Area One
@@ -171,10 +194,36 @@ def town(player):
     #   Selection statements
     if town_selection == '10':
         player.heal()
+        town(player)
+    if town_selection == '5':
+        elv_cave_enter(player)
+    if town_selection == '9':
+        player = save_file(player)
+        town(player)
+    if town_selection == '99':
+        exit(0)
     else:
         os.system('cls')
         print("Command not found")
         town(player)
+
+
+def elv_cave_enter(player):
+    os.system("cls")
+    print("You step into the cave")
+    os.system("pause")
+    os.system("cls")
+    elv_cave_exit(player)
+
+
+def elv_cave_exit(player):
+    print("You step out of the cave")
+    town(player)
+
+
+def elv_cave_post_battle(player):
+    print("What would you like to do?")
+    select = input(" 1) Decend deeper into the cave 2) Exit the cave")
 
 
 if __name__ == "__main__":
