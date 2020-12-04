@@ -20,6 +20,16 @@ class Character:
     def __init__(self, username, password):
         self.stats["username"] = username
         self.stats["password"] = password
+    # Convert to int
+        self.stats["hp"] = int(self.stats["hp"])
+        self.stats["max_hp"] = int(self.stats["max_hp"])
+        self.stats["gold"] = int(self.stats["gold"])
+        self.stats["bank_gold"] = int(self.stats["bank_gold"])
+        self.stats["heal_gold"]  = int(self.stats["heal_gold"])
+        self.stats["flee_gold"] = int(self.stats["flee_gold"])
+        self.stats["town"] = int(self.stats["town"])
+        self.stats["level"] = int(self.stats["level"])
+    # Initial Load values
         self.stats["hp"] = 100
         self.stats["max_hp"] = 100
         self.stats["gold"] = 25
@@ -28,7 +38,7 @@ class Character:
         self.stats["flee_gold"] = 50
         self.stats["town"] = 1
         self.stats["level"] = 1
-        # print("Default Values for new Character " + username + "Loaded!") # For Loading Default Value Debug
+       # print("Default Values for new Character " + username + "Loaded!") # For Loading Default Value Debug
 
     def print_stats(self):  # Prints out stats of the character
         print("Printing Stats for User[" + self.stats["username"] + "]")
@@ -39,10 +49,13 @@ class Character:
             hp_dif = self.stats["hp"] - self.stats["max_hp"]
             self.stats["gold"] = self.stats["gold"] - self.stats["heal_gold"]
             self.stats["hp"] = self.stats["max_hp"]
-            os.system("cls")
             print(self.stats["username"] + " has healed " + str(hp_dif) + " HP")
             os.system("pause")
-            os.system("cls")
+            os.system('cls')
+        else:
+            print(self.stats["username"] + " does not have enough gold")
+            print("Gold[" + str(self.stats["gold"]) + "] Gold Needed[" + str(self.stats["heal_gold"] - self.stats["gold"]) + "]")
+            os.system("pause")
 
 
 # Generalized Enemy Class
@@ -72,16 +85,35 @@ class Enemy:
         except IOError as e: #Error for not finding save file
             os.system('cls')
             print("Enemy Instantiation Save File Error")
+    # Local stats variables
+        self.stats["level_base"] = int(self.stats["level_base"])
+        self.stats["gold_base"] = int(self.stats["gold_base"])
+        self.stats["exp_base"] = int(self.stats["exp_base"])
+        self.stats["hp_base"] = int(self.stats["hp_base"])
+        self.stats["dmg_base"] = int(self.stats["dmg_base"])
+    # Random stats modifier ex attack
+        stats_mod = random.randint(1,3)
+        self.stats["level_base"]  *= stats_mod
+        self.stats["gold_base"] *= stats_mod
+        self.stats["exp_base"] *= stats_mod
+        self.stats["hp_base"] *= stats_mod
+        self.stats["dmg_base"] *= stats_mod
+
+
     def attack(self):
-        pass
+        damage_mod = random.randint(1,20) # Random Damage Modifier
+        self.stats["dmg_base"] += damage_mod
 
 
 
 
-def login(player):
+
+
+def login():
     username = input("Username: ")
     password = input("Password: ")
     correct = 1
+    player = Character(username, password)
     # Parsing Save File
     try:
         with open(username + ".txt", "r") as values:
@@ -90,10 +122,16 @@ def login(player):
                     newline = line.split('=')
                     name = newline[0].rstrip()  # Removing newline characters
                     value = newline[1].rstrip()
-                    player.stats[name] = value
+                    # Int converstion check
+                    if name  == "username" or name == "password":
+                        player.stats[name] = value
+                    else:
+                        player.stats[name] = int(player.stats[name])
+                        player.stats[name] = int(value)
+
                     if name == "password" and value != password:
                         correct = 0
-                        os.system("cls")
+                        os.system('cls')
                         print("Password incorrect")
                         player.stats["password"] = "DENIED"
                         main()
@@ -138,12 +176,11 @@ def save_file(player):
 
 
 def main():
-    version = "version 0.47 (2020-12-04) [Jacob Lowe]"
+    version = "version 0.48 (2020-12-04) [Jacob Lowe]"
     os.system("title The One [" + version + "]")
     print("This game is best in fullscreen...")
     os.system("pause")
-    os.system("cls")
-    p = Character("UNKNOWN", "UNKNOWN")
+    os.system('cls')
     title_file = open("art/" + "titleart.txt", 'r')  # Opening the file in a different directory
     print(title_file.read())
     print('Python Edition ')
@@ -161,13 +198,14 @@ def main():
         os.system('cls')
         town(p)
     if title_selection == '1':
-        loaded_player = login(p)
+        loaded_player = login()
         os.system('cls')
         town(loaded_player)
 
 
 # Area One
 def town(player):
+    os.system('cls')
     print(" ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»")
     print(" º What would you like to do?  º")
     print(".ÌÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹")
@@ -238,13 +276,13 @@ def town(player):
     if town_selection == '99':
         exit(0)
     else:
-        os.system('cls')
         print("Command not found")
+        os.system("pause")
         town(player)
 
 
 def elv_cave_enter(player):
-    os.system("cls")
+    os.system('cls')
     print("You step into the cave")
     Enemy()
     current_enemy = Enemy()
@@ -252,7 +290,7 @@ def elv_cave_enter(player):
     
     
     os.system("pause")
-    os.system("cls")
+    os.system('cls')
     elv_cave_exit(player)
 
 
