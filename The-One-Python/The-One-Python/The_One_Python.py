@@ -48,6 +48,7 @@ class Character:
 # Generalized Enemy Class
 class Enemy:
     stats = {
+        "name":"",
         "level_base": 0,
         "gold_base": 0,
         "exp_base": 0,
@@ -57,17 +58,31 @@ class Enemy:
 
     def __init__(self):
         # Select Random Enemy File
-        enemy_path = 'data/enemies'
-        all_enemies = os.listdir(enemy_path)
-        i = random.randrange(0, len(all_enemies))
-        print(all_enemies[i])
+        enemy_path = 'data\enemies'
+        random_enemy = random.choice(os.listdir(enemy_path))
+        # Parsing Data
+        try:
+            with open(enemy_path + '/' + random_enemy, "r") as enemy_values:
+                for line in enemy_values:
+                       newline = line.split('=')
+                       name = newline[0].rstrip()  # Removing newline characters
+                       enemy_value = newline[1].rstrip()
+                       self.stats[name] = enemy_value
+
+        except IOError as e: #Error for not finding save file
+            os.system('cls')
+            print("Enemy Instantiation Save File Error")
+    def attack(self):
+        pass
+
+
 
 
 def login(player):
     username = input("Username: ")
     password = input("Password: ")
     correct = 1
-
+    # Parsing Save File
     try:
         with open(username + ".txt", "r") as values:
             for line in values:
@@ -123,7 +138,7 @@ def save_file(player):
 
 
 def main():
-    version = "version 0.46 (2020-11-29) [Jacob Lowe]"
+    version = "version 0.47 (2020-12-04) [Jacob Lowe]"
     os.system("title The One [" + version + "]")
     print("This game is best in fullscreen...")
     os.system("pause")
@@ -232,9 +247,10 @@ def elv_cave_enter(player):
     os.system("cls")
     print("You step into the cave")
     Enemy()
-    Enemy()
-    Enemy()
-    Enemy()
+    current_enemy = Enemy()
+    print(current_enemy.stats)
+    
+    
     os.system("pause")
     os.system("cls")
     elv_cave_exit(player)
