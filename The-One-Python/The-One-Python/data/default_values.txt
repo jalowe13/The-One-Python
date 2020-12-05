@@ -5,3 +5,5 @@ bank_gold=0
 flee_gold=50
 town=1
 level=1
+equipped_weapon=Nothing
+dmg_base=1

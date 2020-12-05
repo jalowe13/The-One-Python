@@ -14,8 +14,12 @@ class Character:
         "heal_gold": 0,
         "flee_gold": 0,
         "town": 1,
-        "level": 1
+        "level": 1,
+        "equipped_weapon" : "Nothing",
+        "dmg_base" : 1,
+        "backpack" : []
     }
+
 
     def __init__(self, username, password):
         self.stats["username"] = username
@@ -29,6 +33,9 @@ class Character:
         self.stats["flee_gold"] = int(self.stats["flee_gold"])
         self.stats["town"] = int(self.stats["town"])
         self.stats["level"] = int(self.stats["level"])
+    # Weapon
+        self.stats["equipped_weapon"] = str(self.stats["equipped_weapon"])
+        self.stats["dmg_base"] = int(self.stats["dmg_base"])
     # Initial Load values
         self.stats["hp"] = 100
         self.stats["max_hp"] = 100
@@ -71,6 +78,11 @@ class Character:
             print(self.stats["username"] + " does not have enough gold")
             print("Gold[" + str(self.stats["gold"]) + "] Gold Needed[" + str(self.stats["heal_gold"] - self.stats["gold"]) + "]")
             os.system("pause")
+    def equip(item):
+        pass
+    def store_backpack(item):
+        backpack = self.stats["backpack"]
+        backpack.append()
 
 
 
@@ -129,10 +141,17 @@ class Enemy:
      damage_mod = random.randint(1,20) # Random Damage Modifier
      return int(int(self.stats["dmg_base"]) + damage_mod)
 
+ # Generalized Weapon Class
+class Weapon:
+    stats = {
+        "name":"Default_Weapon",
+        "dmg": 1
+    }
+    def __init__(self, name, damage):
+        self.stats["name"] = str(name)
+        self.stats["dmg"] = int(damage)
 
-
-
-
+        
 
 def login():
     username = input("Username: ")
@@ -325,6 +344,13 @@ def combat_start(player,enemy):
     print(" 2)Equip")
     print(" 3)Run")
     combat_selection = input("Selection: ")
+    if combat_selection == '1':
+        pass
+    if combat_selection == '2':
+        player.equip()
+        pass
+    if combat_selection == '3':
+        pass
 
 def combat_player_attack():
     pass
