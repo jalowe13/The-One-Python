@@ -44,6 +44,20 @@ class Character:
         print("Printing Stats for User[" + self.stats["username"] + "]")
         print(self.stats)
 
+     #Getters for Stats
+    def getName(self): 
+        return self.stats["username"]
+
+    def getLevel(self):
+        return self.stats["level"]
+
+    def getHP(self):
+        return self.stats["hp"]
+
+    def attack(self):
+     damage_mod = random.randint(1,20) # Random Damage Modifier
+     return self.stats["dmg_base"] + damage_mod
+
     def heal(self):  # Healing condition to self heal when called when the right amount of heal gold is met
         if self.stats["gold"] >= self.stats["heal_gold"]:
             hp_dif = self.stats["hp"] - self.stats["max_hp"]
@@ -56,6 +70,10 @@ class Character:
             print(self.stats["username"] + " does not have enough gold")
             print("Gold[" + str(self.stats["gold"]) + "] Gold Needed[" + str(self.stats["heal_gold"] - self.stats["gold"]) + "]")
             os.system("pause")
+
+    def getName(self): # Name return function
+        return  self.stats["username"]
+
 
 
 # Generalized Enemy Class
@@ -99,10 +117,19 @@ class Enemy:
         self.stats["hp_base"] *= stats_mod
         self.stats["dmg_base"] *= stats_mod
 
+    #Getters for Stats
+    def getName(self): 
+        return self.stats["name"]
+
+    def getLevel(self):
+        return self.stats["level_base"]
+
+    def getHP(self):
+        return self.stats["hp_base"]
 
     def attack(self):
-        damage_mod = random.randint(1,20) # Random Damage Modifier
-        self.stats["dmg_base"] += damage_mod
+     damage_mod = random.randint(1,20) # Random Damage Modifier
+     return self.stats["dmg_base"] + damage_mod
 
 
 
@@ -176,7 +203,7 @@ def save_file(player):
 
 
 def main():
-    version = "version 0.48 (2020-12-04) [Jacob Lowe]"
+    version = "version 0.49 (2020-12-04) [Jacob Lowe]"
     os.system("title The One [" + version + "]")
     print("This game is best in fullscreen...")
     os.system("pause")
@@ -286,12 +313,28 @@ def elv_cave_enter(player):
     print("You step into the cave")
     Enemy()
     current_enemy = Enemy()
-    print(current_enemy.stats)
-    
-    
+    # print(current_enemy.stats) #debugging stats
     os.system("pause")
+    combat_start(player,current_enemy)
+
+def combat_start(player,enemy):
     os.system('cls')
-    elv_cave_exit(player)
+    print("[" + player.getName + "][Level " + player.getLevel + "] [" + player.getHP + "HP]  [" + enemy.getName + "][Level" + enemy.getLevel + "] [" + enemy.getHP + "HP]")
+    print("")
+    print( "What would you like to do?")
+    print("")
+    print("")
+    print(" 1)Attack")
+    print(" 2)Equip")
+    print(" 3)Run")
+    combat_selection = input("Selection: ")
+
+def combat_player_attack():
+    pass
+
+def combat_enemy_attack():
+    pass
+
 
 
 def elv_cave_exit(player):
