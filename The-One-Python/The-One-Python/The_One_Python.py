@@ -46,17 +46,18 @@ class Character:
 
      #Getters for Stats
     def getName(self): 
-        return self.stats["username"]
+        username = str(self.stats.get("username"))
+        return username
 
     def getLevel(self):
-        return self.stats["level"]
+        return int(self.stats["level"])
 
     def getHP(self):
-        return self.stats["hp"]
+        return int(self.stats["hp"])
 
     def attack(self):
      damage_mod = random.randint(1,20) # Random Damage Modifier
-     return self.stats["dmg_base"] + damage_mod
+     return int(int(self.stats["dmg_base"]) + damage_mod)
 
     def heal(self):  # Healing condition to self heal when called when the right amount of heal gold is met
         if self.stats["gold"] >= self.stats["heal_gold"]:
@@ -70,9 +71,6 @@ class Character:
             print(self.stats["username"] + " does not have enough gold")
             print("Gold[" + str(self.stats["gold"]) + "] Gold Needed[" + str(self.stats["heal_gold"] - self.stats["gold"]) + "]")
             os.system("pause")
-
-    def getName(self): # Name return function
-        return  self.stats["username"]
 
 
 
@@ -119,17 +117,17 @@ class Enemy:
 
     #Getters for Stats
     def getName(self): 
-        return self.stats["name"]
+        return str(self.stats["name"])
 
     def getLevel(self):
-        return self.stats["level_base"]
+        return int(self.stats["level_base"])
 
     def getHP(self):
-        return self.stats["hp_base"]
+        return int(self.stats["hp_base"])
 
     def attack(self):
      damage_mod = random.randint(1,20) # Random Damage Modifier
-     return self.stats["dmg_base"] + damage_mod
+     return int(int(self.stats["dmg_base"]) + damage_mod)
 
 
 
@@ -311,7 +309,6 @@ def town(player):
 def elv_cave_enter(player):
     os.system('cls')
     print("You step into the cave")
-    Enemy()
     current_enemy = Enemy()
     # print(current_enemy.stats) #debugging stats
     os.system("pause")
@@ -319,7 +316,7 @@ def elv_cave_enter(player):
 
 def combat_start(player,enemy):
     os.system('cls')
-    print("[" + player.getName + "][Level " + player.getLevel + "] [" + player.getHP + "HP]  [" + enemy.getName + "][Level" + enemy.getLevel + "] [" + enemy.getHP + "HP]")
+    print("[" + player.getName() + "] [Level " + str(player.getLevel()) + "] [" + str(player.getHP()) + "HP]  [" + enemy.getName() + "][Level" + str(enemy.getLevel()) + "] [" + str(enemy.getHP()) + "HP]")
     print("")
     print( "What would you like to do?")
     print("")
