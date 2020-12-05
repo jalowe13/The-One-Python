@@ -1,2 +1,2 @@
 name=Stick
-dmg=1
+dmg=3

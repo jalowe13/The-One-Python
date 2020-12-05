@@ -15,9 +15,9 @@ class Character:
         "flee_gold": 0,
         "town": 1,
         "level": 1,
-        "equipped_weapon" : "Nothing",
-        "dmg_base" : 1,
-        "backpack" : []
+        "equipped_weapon": "",
+        "dmg_base": 1,
+        "backpack": []
     }
 
 
@@ -62,9 +62,15 @@ class Character:
     def getHP(self):
         return int(self.stats["hp"])
 
-    def attack(self):
+    def attack(self): # Amount to calculate for damage
      damage_mod = random.randint(1,20) # Random Damage Modifier
      return int(int(self.stats["dmg_base"]) + damage_mod)
+
+    def attacked(self,amount): # Passes in amount of damage taken
+        newHealth = int(self.stats["hp"] - amount)
+        self.stats["hp"] = newHealth
+        print(self.getName() + " was hit for " + str(amount) + "HP")
+        os.system("pause")
 
     def heal(self):  # Healing condition to self heal when called when the right amount of heal gold is met
         if self.stats["gold"] >= self.stats["heal_gold"]:
@@ -78,8 +84,14 @@ class Character:
             print(self.stats["username"] + " does not have enough gold")
             print("Gold[" + str(self.stats["gold"]) + "] Gold Needed[" + str(self.stats["heal_gold"] - self.stats["gold"]) + "]")
             os.system("pause")
-    def equip(item):
-        pass
+    def equip(self):
+        print(os.listdir("data\weapons"))
+        print("Please enter the name of the item you would like to equip")
+        weapon_name = input("Selection: ")
+        equiped = Weapon(weapon_name)
+        self.stats["equipped_weapon"] = equiped.load_name()
+        self.stats["dmg_base"] = equiped.load_dmg()
+        print(self.getName() + "has equipped the " + str(self.stats["equipped_weapon"]))
     def store_backpack(item):
         backpack = self.stats["backpack"]
         backpack.append()
@@ -137,9 +149,15 @@ class Enemy:
     def getHP(self):
         return int(self.stats["hp_base"])
 
-    def attack(self):
+    def attack(self): # Amount to calculate for damage
      damage_mod = random.randint(1,20) # Random Damage Modifier
      return int(int(self.stats["dmg_base"]) + damage_mod)
+     
+    def attacked(self,amount): # Passes in amount of damage taken
+        newHealth = int(self.stats["hp_base"] - amount)
+        self.stats["hp_base"] = newHealth
+        print(self.getName() + " was hit for " + str(amount) + "HP")
+        os.system("pause")
 
  # Generalized Weapon Class
 class Weapon:
@@ -147,9 +165,25 @@ class Weapon:
         "name":"Default_Weapon",
         "dmg": 1
     }
-    def __init__(self, name, damage):
-        self.stats["name"] = str(name)
-        self.stats["dmg"] = int(damage)
+    def __init__(self,weapon):
+        # Select Weapon File
+        weapon_path = 'data\weapons'
+        # Parsing Data
+        try:
+            with open(weapon_path + '/' + weapon + ".txt", "r") as weapon_values:
+                for line in weapon_values:
+                       newline = line.split('=')
+                       name = newline[0].rstrip()  # Removing newline characters
+                       weapon_value = newline[1].rstrip()
+                       self.stats[name] = weapon_value
+        except IOError as e: #Error for not finding save file
+            os.system('cls')
+            print("Enemy Instantiation Save File Error")
+
+    def load_name(self):
+        return str(self.stats["name"])
+    def load_dmg(self):
+        return int(self.stats["dmg"])
 
         
 
@@ -167,7 +201,7 @@ def login():
                     name = newline[0].rstrip()  # Removing newline characters
                     value = newline[1].rstrip()
                     # Int converstion check
-                    if name  == "username" or name == "password":
+                    if name  == "username" or name == "password" or name == "equipped_weapon":
                         player.stats[name] = value
                     else:
                         player.stats[name] = int(player.stats[name])
@@ -215,6 +249,8 @@ def save_file(player):
     new_save.write("flee_gold=" + str(player.stats["flee_gold"]) + "\n")
     new_save.write("town=" + str(player.stats["town"]) + "\n")
     new_save.write("level=" + str(player.stats["level"]) + "\n")
+    new_save.write("equipped_weapon=" + str(player.stats["equipped_weapon"]) + "\n")
+    new_save.write("dmg_base=" + str(player.stats["dmg_base"]) + "\n")
     print("Saved")
     return player
 
@@ -333,6 +369,7 @@ def elv_cave_enter(player):
     os.system("pause")
     combat_start(player,current_enemy)
 
+    # Combat Start Tasks and Randomization
 def combat_start(player,enemy):
     os.system('cls')
     print("[" + player.getName() + "] [Level " + str(player.getLevel()) + "] [" + str(player.getHP()) + "HP]  [" + enemy.getName() + "][Level" + str(enemy.getLevel()) + "] [" + str(enemy.getHP()) + "HP]")
@@ -345,18 +382,34 @@ def combat_start(player,enemy):
     print(" 3)Run")
     combat_selection = input("Selection: ")
     if combat_selection == '1':
-        pass
+        combat_player_attack(player,enemy)
     if combat_selection == '2':
         player.equip()
-        pass
+        combat_start(player,enemy)
     if combat_selection == '3':
         pass
+    # Player and Enemy Attacks
+def combat_player_attack(player,enemy):
+    os.system("cls")
+    damage = player.attack()
+    print(player.getName() + " attacked " + enemy.getName())
+    enemy.attacked(damage)
+    combat_enemy_attack(player,enemy)
 
-def combat_player_attack():
-    pass
-
-def combat_enemy_attack():
-    pass
+def combat_enemy_attack(player,enemy):
+    os.system("cls")
+    damage = enemy.attack()
+    print(enemy.getName() + " attacked " + player.getName())
+    player.attacked(damage)
+    enemyHP = int(enemy.getHP())
+    playerHP = int(player.getHP())
+    if enemyHP <= 0:
+        # Give Player Enemy Gold Stub
+        elv_cave_post_battle(player)
+    if playerHP <=0:
+        elv_cave_faint(player)
+    else:
+        combat_start(player,enemy)
 
 
 
@@ -368,6 +421,16 @@ def elv_cave_exit(player):
 def elv_cave_post_battle(player):
     print("What would you like to do?")
     select = input(" 1) Decend deeper into the cave 2) Exit the cave")
+    if select == 1:
+        new_enemy = Enemy()
+        combat_start(player,new_enemy)
+    if select == 2:
+        town(player)
+
+def elv_cave_faint(player): # Player fainting under 0 HP
+    print("Loss!")
+    os.system("pause")
+    town(player)
 
 
 if __name__ == "__main__":
