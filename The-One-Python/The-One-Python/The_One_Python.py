@@ -271,7 +271,7 @@ def save_file(player):
 
 
 def main():
-    version = "version 0.49 (2020-12-04) [Jacob Lowe]"
+    version = "version 0.6.1 (2020-12-05) [Jacob Lowe]"
     os.system("title The One [" + version + "]")
     print("This game is best in fullscreen...")
     print("[Project Notice][This is not a completed Version of the Game]")
