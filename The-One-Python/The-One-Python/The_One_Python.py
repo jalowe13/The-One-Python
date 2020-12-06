@@ -15,7 +15,7 @@ class Character:
         "flee_gold": 0,
         "town": 1,
         "level": 1,
-        "equipped_weapon": "",
+        "equipped_weapon": "Fists",
         "dmg_base": 1,
         "backpack": []
     }
@@ -62,6 +62,12 @@ class Character:
     def getHP(self):
         return int(self.stats["hp"])
 
+    def getWeapon(self):
+        return str(self.stats["equipped_weapon"])
+
+    def getWeaponDmg(self):
+        return int(self.stats["dmg_base"])
+
     def attack(self): # Amount to calculate for damage
      damage_mod = random.randint(1,20) # Random Damage Modifier
      return int(int(self.stats["dmg_base"]) + damage_mod)
@@ -74,7 +80,7 @@ class Character:
 
     def heal(self):  # Healing condition to self heal when called when the right amount of heal gold is met
         if self.stats["gold"] >= self.stats["heal_gold"]:
-            hp_dif = self.stats["hp"] - self.stats["max_hp"]
+            hp_dif = self.stats["max_hp"] - self.stats["hp"]
             self.stats["gold"] = self.stats["gold"] - self.stats["heal_gold"]
             self.stats["hp"] = self.stats["max_hp"]
             print(self.stats["username"] + " has healed " + str(hp_dif) + " HP")
@@ -96,6 +102,11 @@ class Character:
         backpack = self.stats["backpack"]
         backpack.append()
 
+    def addGold(self,amount): # Passes in amount of new gold
+        newGold = int(self.stats["gold"] + amount)
+        self.stats["gold"] = newGold
+        print(self.getName() + " gained " + str(amount) + "GP")
+        os.system("pause")
 
 
 # Generalized Enemy Class
@@ -149,6 +160,9 @@ class Enemy:
     def getHP(self):
         return int(self.stats["hp_base"])
 
+    def getGold(self):
+        return int(self.stats["gold_base"])
+
     def attack(self): # Amount to calculate for damage
      damage_mod = random.randint(1,20) # Random Damage Modifier
      return int(int(self.stats["dmg_base"]) + damage_mod)
@@ -158,6 +172,7 @@ class Enemy:
         self.stats["hp_base"] = newHealth
         print(self.getName() + " was hit for " + str(amount) + "HP")
         os.system("pause")
+
 
  # Generalized Weapon Class
 class Weapon:
@@ -259,6 +274,17 @@ def main():
     version = "version 0.49 (2020-12-04) [Jacob Lowe]"
     os.system("title The One [" + version + "]")
     print("This game is best in fullscreen...")
+    print("[Project Notice][This is not a completed Version of the Game]")
+    print("The following program only has the following parts implemented for the ECE 2524 Project to correctly show the UNIX System Administration work involved, such as file management")
+    print("--------------------")
+    print("Features Implemented")
+    print("--------------------")
+    print("- File Creation, Updating, and Reference")
+    print("- Main Town")
+    print("- Heal at Town")
+    print("- Save at Town")
+    print("- Basic Combat")
+    print("- Equip in Combat")
     os.system("pause")
     os.system('cls')
     title_file = open("art/" + "titleart.txt", 'r')  # Opening the file in a different directory
@@ -281,6 +307,8 @@ def main():
         loaded_player = login()
         os.system('cls')
         town(loaded_player)
+    os.system("cls")
+    main()
 
 
 # Area One
@@ -289,27 +317,27 @@ def town(player):
     print(" ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»")
     print(" º What would you like to do?  º")
     print(".ÌÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹")
-    print(" º 1) Travel to the next town  º")
-    print(".º                             º")
-    print(" º 2) Elvendale Weapon Shop    º")
-    print(".º                             º")
-    print(" º 3) Elvendale Armor Shop     º")
-    print(".º                             º")
-    print(" º 4) Elvendale Trading Post   º")
-    print(".º                             º")
+   # print(" º 1) Travel to the next town  º")
+   # print(".º                             º")
+   # print(" º 2) Elvendale Weapon Shop    º")
+   # print(".º                             º")
+   # print(" º 3) Elvendale Armor Shop     º")
+   # print(".º                             º")
+   # print(" º 4) Elvendale Trading Post   º")
+   # print(".º                             º")
     print(" º 5) Local Elven-dale Cave    º")
-    print(".º                             º")
-    print(" º 6) Skill Chart              º")
-    print(".º                             º")
-    print(" º 7) World Bank               º")
-    print(".º                             º")
-    print(" º 8) Quest's                  º")
-    print(".º                             º")
+   # print(".º                             º")
+   # print(" º 6) Skill Chart              º")
+   # print(".º                             º")
+    #print(" º 7) World Bank               º")
+   # print(".º                             º")
+   # print(" º 8) Quest's                  º")
+   # print(".º                             º")
     print(" º 9) Save                     º")
-    print(" º                             º")
+   # print(" º                             º")
     print(" º 10) Heal                    º")
-    print(" º                             º")
-    print(" º 98) " + player.stats["username"] + "'s Inventory º")
+   # print(" º                             º")
+   # print(" º 98) " + player.stats["username"] + "'s Inventory º")
     print(" ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
     print(".")
     print(".")
@@ -324,9 +352,9 @@ def town(player):
     print(".")
     print(".    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»")
     print(".    º HP[" + str(player.stats["hp"]) + "] ºGold[" + str(player.stats["gold"]) + "] º")
-    print(".    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
-    print(".")
-    print(".")
+    print(".    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
+    print("     [Currently Equipped][" + player.getWeapon() + "] [Base Damage] [" + str(player.getWeaponDmg()) + "]")
+    print(".    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
     print(".")
     print(".")
     print(".")
@@ -373,6 +401,7 @@ def elv_cave_enter(player):
 def combat_start(player,enemy):
     os.system('cls')
     print("[" + player.getName() + "] [Level " + str(player.getLevel()) + "] [" + str(player.getHP()) + "HP]  [" + enemy.getName() + "][Level" + str(enemy.getLevel()) + "] [" + str(enemy.getHP()) + "HP]")
+    print("[Currently Equipped][" + player.getWeapon() + "] [Base Damage] [" + str(player.getWeaponDmg()) + "]")
     print("")
     print( "What would you like to do?")
     print("")
@@ -381,20 +410,36 @@ def combat_start(player,enemy):
     print(" 2)Equip")
     print(" 3)Run")
     combat_selection = input("Selection: ")
-    if combat_selection == '1':
+    if combat_selection == '1': # Attack
         combat_player_attack(player,enemy)
-    if combat_selection == '2':
+    if combat_selection == '2': # Equip
         player.equip()
         combat_start(player,enemy)
-    if combat_selection == '3':
-        pass
+    if combat_selection == '3': # Run
+        if (player.getHP() > enemy.getHP()):
+            print(player.getName() + " runs away from " + enemy.getName())
+            os.system("pause")
+            elv_cave_exit(player)
+        else:
+            print("The " + enemy.getName() + " strikes fear into your heart. You cannot escape")
+            os.system("pause")
+            combat_start(player,enemy)
+    combat_start(player,enemy)
+
     # Player and Enemy Attacks
 def combat_player_attack(player,enemy):
     os.system("cls")
     damage = player.attack()
     print(player.getName() + " attacked " + enemy.getName())
     enemy.attacked(damage)
-    combat_enemy_attack(player,enemy)
+    enemyHP = int(enemy.getHP())
+    if enemyHP <= 0:
+       gold = enemy.getGold()
+       player.addGold(gold)
+       elv_cave_post_battle(player)
+    else:
+        combat_enemy_attack(player,enemy)
+
 
 def combat_enemy_attack(player,enemy):
     os.system("cls")
@@ -403,34 +448,41 @@ def combat_enemy_attack(player,enemy):
     player.attacked(damage)
     enemyHP = int(enemy.getHP())
     playerHP = int(player.getHP())
-    if enemyHP <= 0:
-        # Give Player Enemy Gold Stub
-        elv_cave_post_battle(player)
     if playerHP <=0:
         elv_cave_faint(player)
-    else:
-        combat_start(player,enemy)
+    if enemyHP <= 0:
+        gold = enemy.getGold()
+        player.addGold(gold)
+        elv_cave_post_battle(player)
+    combat_start(player,enemy)
 
 
 
 def elv_cave_exit(player):
+    os.system("cls")
     print("You step out of the cave")
+    os.system("pause")
     town(player)
 
 
 def elv_cave_post_battle(player):
+    os.system("cls")
     print("What would you like to do?")
-    select = input(" 1) Decend deeper into the cave 2) Exit the cave")
-    if select == 1:
+    print(" 1) Decend deeper into the cave 2) Exit the cave")
+    select = input("Selection: ")
+    if select == '1':
         new_enemy = Enemy()
         combat_start(player,new_enemy)
-    if select == 2:
+    if select == '2':
         town(player)
+    elv_cave_post_battle(player)
 
 def elv_cave_faint(player): # Player fainting under 0 HP
-    print("Loss!")
+    print(player.getName() + " has faded into existance, only the winds whisper " + player.getName() + "'s name now.")
+    print(" ")
+    print("[Game Over]")
     os.system("pause")
-    town(player)
+    exit(0)
 
 
 if __name__ == "__main__":
