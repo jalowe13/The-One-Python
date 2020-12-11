@@ -1,8 +1,8 @@
 import os
 import random
 
-
-# Generalized Character Class for Player
+# Classes
+    # Generalized Character Class for Player
 class Character:
     stats = {
         "username": "",
@@ -107,9 +107,7 @@ class Character:
         self.stats["gold"] = newGold
         print(self.getName() + " gained " + str(amount) + "GP")
         os.system("pause")
-
-
-# Generalized Enemy Class
+    # Generalized Enemy Class
 class Enemy:
     stats = {
         "name":"",
@@ -172,9 +170,7 @@ class Enemy:
         self.stats["hp_base"] = newHealth
         print(self.getName() + " was hit for " + str(amount) + "HP")
         os.system("pause")
-
-
- # Generalized Weapon Class
+    # Generalized Weapon Class
 class Weapon:
     stats = {
         "name":"Default_Weapon",
@@ -200,8 +196,7 @@ class Weapon:
     def load_dmg(self):
         return int(self.stats["dmg"])
 
-        
-
+ # Methods
 def login():
     username = input("Username: ")
     password = input("Password: ")
@@ -233,8 +228,6 @@ def login():
         print("*******Save file for " + username + " not found*******")
         main()
     return player
-
-
 def create_account():
     username = input('What would you like your username to be?: ')
     password = input('What would you like your password to be?: ')
@@ -248,9 +241,7 @@ def create_account():
         for line in values:
             save.write(line)
     return player
-
-
-# Saving file in town
+    # Saving file in town
 def save_file(player):
     #   Save File Contents Of All Stats
     new_save = open(player.stats["username"] + ".txt", "w")
@@ -268,8 +259,6 @@ def save_file(player):
     new_save.write("dmg_base=" + str(player.stats["dmg_base"]) + "\n")
     print("Saved")
     return player
-
-
 def main():
     version = "version 0.6.1 (2020-12-05) [Jacob Lowe]"
     os.system("title The One [" + version + "]")
@@ -309,9 +298,7 @@ def main():
         town(loaded_player)
     os.system("cls")
     main()
-
-
-# Area One
+    # Area One
 def town(player):
     os.system('cls')
     print(" ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»")
@@ -387,8 +374,6 @@ def town(player):
         print("Command not found")
         os.system("pause")
         town(player)
-
-
 def elv_cave_enter(player):
     os.system('cls')
     print("You step into the cave")
@@ -396,7 +381,6 @@ def elv_cave_enter(player):
     # print(current_enemy.stats) #debugging stats
     os.system("pause")
     combat_start(player,current_enemy)
-
     # Combat Start Tasks and Randomization
 def combat_start(player,enemy):
     os.system('cls')
@@ -425,8 +409,8 @@ def combat_start(player,enemy):
             os.system("pause")
             combat_start(player,enemy)
     combat_start(player,enemy)
-
-    # Player and Enemy Attacks
+        # Player and Enemy Attacks
+    # Player attack portion of the cave
 def combat_player_attack(player,enemy):
     os.system("cls")
     damage = player.attack()
@@ -439,8 +423,7 @@ def combat_player_attack(player,enemy):
        elv_cave_post_battle(player)
     else:
         combat_enemy_attack(player,enemy)
-
-
+    # Enemy attack portion of the cave
 def combat_enemy_attack(player,enemy):
     os.system("cls")
     damage = enemy.attack()
@@ -455,16 +438,13 @@ def combat_enemy_attack(player,enemy):
         player.addGold(gold)
         elv_cave_post_battle(player)
     combat_start(player,enemy)
-
-
-
+    # Cave Exit Method
 def elv_cave_exit(player):
     os.system("cls")
     print("You step out of the cave")
     os.system("pause")
     town(player)
-
-
+    # Cave Exit Post Battle
 def elv_cave_post_battle(player):
     os.system("cls")
     print("What would you like to do?")
@@ -476,14 +456,12 @@ def elv_cave_post_battle(player):
     if select == '2':
         town(player)
     elv_cave_post_battle(player)
-
+    # Cave Death
 def elv_cave_faint(player): # Player fainting under 0 HP
     print(player.getName() + " has faded into existance, only the winds whisper " + player.getName() + "'s name now.")
     print(" ")
     print("[Game Over]")
     os.system("pause")
     exit(0)
-
-
 if __name__ == "__main__":
     main()
