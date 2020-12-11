@@ -1,6 +1,6 @@
-name=Hoodie Seller
+name=Local Blasian
 level_base=1
-gold_base=200
+gold_base=40
 exp_base=30
-hp_base=25
-dmg_base=3
+hp_base=100
+dmg_base=30

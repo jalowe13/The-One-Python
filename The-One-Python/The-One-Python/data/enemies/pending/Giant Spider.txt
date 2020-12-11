@@ -1,6 +1,6 @@
-name=Hoodie Seller
+name=Giant Spider
 level_base=1
 gold_base=200
 exp_base=30
-hp_base=25
-dmg_base=3
+hp_base=20
+dmg_base=20
