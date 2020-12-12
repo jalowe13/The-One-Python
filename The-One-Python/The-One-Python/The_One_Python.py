@@ -1,6 +1,9 @@
 import os
 import random
+import importlib
 
+# Importing my basic media module
+media = importlib.import_module('basic_media')
 
 # Classes
 # Generalized Character Class for Player
@@ -277,9 +280,9 @@ def save_file(player):
 
 
 def main():
-    version = "version 0.6.1 (2020-12-05) [Jacob Lowe]"
+    version = "version 0.6.2 (2020-12-11) [Jacob Lowe]"
     os.system("title The One [" + version + "]")
-    print("This game is best in fullscreen...")
+    print("This game is best in fullscreen [Alt + Enter]")
     print("[Project Notice][This is not a completed Version of the Game]")
     print(
         "The following program only has the following parts implemented for the ECE 2524 Project to correctly show the UNIX System Administration work involved, such as file management")
@@ -298,6 +301,7 @@ def main():
     print(title_file.read())
     print('Python Edition ')
     print(version)
+    media.printimage("title_valley.txt")
     print('1) Login')
     print('2) Create Account')
     print('3) Exit')
@@ -305,7 +309,6 @@ def main():
     # Title Selection
     if title_selection == '3':
         exit(0)
-
     if title_selection == '2':
         p = create_account()
         os.system('cls')
@@ -321,72 +324,28 @@ def main():
 
 def town(player):
     os.system('cls')
-    print(" ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»")
-    print(" º What would you like to do?  º")
-    print(".ÌÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹")
-    # print(" º 1) Travel to the next town  º")
-    # print(".º                             º")
-    # print(" º 2) Elvendale Weapon Shop    º")
-    # print(".º                             º")
-    # print(" º 3) Elvendale Armor Shop     º")
-    # print(".º                             º")
-    # print(" º 4) Elvendale Trading Post   º")
-    # print(".º                             º")
-    print(" º 5) Local Elven-dale Cave    º")
-    # print(".º                             º")
-    # print(" º 6) Skill Chart              º")
-    # print(".º                             º")
-    # print(" º 7) World Bank               º")
-    # print(".º                             º")
-    # print(" º 8) Quest's                  º")
-    # print(".º                             º")
-    print(" º 9) Save                     º")
-    # print(" º                             º")
-    print(" º 10) Heal                    º")
-    # print(" º                             º")
-    # print(" º 98) " + player.stats["username"] + "'s Inventory º")
-    print(" ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
-    print(".")
-    print(".")
-    print(".")
-    print(".          [" + player.stats["username"] + "]")
-    print(".               _")
-    print(".              ( )")
-    print(".               I")
-    print(".              YIY")
-    print(".               I")
-    print(".              I I")
-    print(".")
-    print(".    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»")
+    media.printimage("pico.txt")
+    print(" ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»      [" + player.stats["username"] + "]")
+    print(" º What would you like to do?")
+    print(".ÌÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹                    _")
+    print(" º 1) Local Elven-dale Cave    º                   ( )")
+    print(" º 2) Save                     º                   YIY")
+    print(" º 3) Heal                    º                     I")
+    print(" ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼                   I I")
     print(".    º HP[" + str(player.stats["hp"]) + "] ºGold[" + str(player.stats["gold"]) + "] º")
     print(".    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
     print("     [Currently Equipped][" + player.getWeapon() + "] [Base Damage] [" + str(player.getWeaponDmg()) + "]")
-    print(".    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
-    print(".")
-    print(".")
-    print(".")
-    print(".")
-    print(".")
-    print(".")
-    print(".")
-    print(".")
-    print(".")
-    print(" ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»")
-    print("   Currently logged in as " + player.stats["username"])
-    print(".ÌÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹")
-    print(" º 99) Log out                           º")
-    print(" ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
-    print(".")
     town_selection = input("Selection: ")
 
     #   Selection statements
-    if town_selection == '10':
+    if town_selection == '3':
         player.heal()
         town(player)
-    if town_selection == '5':
+    if town_selection == '1':
         elv_cave_enter(player)
-    if town_selection == '9':
+    if town_selection == '2':
         player = save_file(player)
+        media.savesound()
         town(player)
     if town_selection == '99':
         exit(0)
