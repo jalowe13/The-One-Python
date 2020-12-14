@@ -4,6 +4,7 @@ import importlib
 
 # Importing my basic media module
 media = importlib.import_module('basic_media')
+combat = importlib.import_module('basic_combat')
 
 # Classes
 # Generalized Character Class for Player
@@ -280,7 +281,7 @@ def save_file(player):
 
 
 def main():
-    version = "version 0.6.2 (2020-12-11) [Jacob Lowe]"
+    version = "version 0.6.3 (2020-12-13) [Jacob Lowe]"
     os.system("title The One [" + version + "]")
     print("This game is best in fullscreen [Alt + Enter]")
     print("[Project Notice][This is not a completed Version of the Game]")
@@ -335,19 +336,19 @@ def town(player):
     print(".    º HP[" + str(player.stats["hp"]) + "] ºGold[" + str(player.stats["gold"]) + "] º")
     print(".    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
     print("     [Currently Equipped][" + player.getWeapon() + "] [Base Damage] [" + str(player.getWeaponDmg()) + "]")
-    town_selection = input("Selection: ")
+    town_selection = int(input("Selection: "))
 
     #   Selection statements
-    if town_selection == '3':
-        player.heal()
-        town(player)
-    if town_selection == '1':
+    if town_selection == 1:
         elv_cave_enter(player)
-    if town_selection == '2':
+    if town_selection == 2:
         player = save_file(player)
         media.savesound()
         town(player)
-    if town_selection == '99':
+    if town_selection == 3:
+        player.heal()
+        town(player)
+    if town_selection == 99:
         exit(0)
     else:
         print("Command not found")
@@ -359,75 +360,20 @@ def elv_cave_enter(player):
     os.system('cls')
     print("You step into the cave")
     current_enemy = Enemy()
-    # print(current_enemy.stats) #debugging stats
+    print(current_enemy.stats) #debugging stats
+    media.printimage("cave.txt")
     os.system("pause")
-    combat_start(player, current_enemy)
+    won = combat.start(player, current_enemy)
+    if won:
+        elv_cave_post_battle(player)
+    else:
+        print("Elv Cave Enter Battle Error")
     # Combat Start Tasks and Randomization
 
-
-def combat_start(player, enemy):
-    os.system('cls')
-    print("[" + player.getName() + "] [Level " + str(player.getLevel()) + "] [" + str(
-        player.getHP()) + "HP]  [" + enemy.getName() + "][Level" + str(enemy.getLevel()) + "] [" + str(
-        enemy.getHP()) + "HP]")
-    print("[Currently Equipped][" + player.getWeapon() + "] [Base Damage] [" + str(player.getWeaponDmg()) + "]")
-    print("")
-    print("What would you like to do?")
-    print("")
-    print("")
-    print(" 1)Attack")
-    print(" 2)Equip")
-    print(" 3)Run")
-    combat_selection = input("Selection: ")
-    if combat_selection == '1':  # Attack
-        combat_player_attack(player, enemy)
-    if combat_selection == '2':  # Equip
-        player.equip()
-        combat_start(player, enemy)
-    if combat_selection == '3':  # Run
-        if (player.getHP() > enemy.getHP()):
-            print(player.getName() + " runs away from " + enemy.getName())
-            os.system("pause")
-            elv_cave_exit(player)
-        else:
-            print("The " + enemy.getName() + " strikes fear into your heart. You cannot escape")
-            os.system("pause")
-            combat_start(player, enemy)
-    combat_start(player, enemy)
     # Player and Enemy Attacks
     # Player attack portion of the cave
 
 
-def combat_player_attack(player, enemy):
-    os.system("cls")
-    damage = player.attack()
-    print(player.getName() + " attacked " + enemy.getName())
-    enemy.attacked(damage)
-    enemyHP = int(enemy.getHP())
-    if enemyHP <= 0:
-        gold = enemy.getGold()
-        player.addGold(gold)
-        elv_cave_post_battle(player)
-    else:
-        combat_enemy_attack(player, enemy)
-    # Enemy attack portion of the cave
-
-
-def combat_enemy_attack(player, enemy):
-    os.system("cls")
-    damage = enemy.attack()
-    print(enemy.getName() + " attacked " + player.getName())
-    player.attacked(damage)
-    enemyHP = int(enemy.getHP())
-    playerHP = int(player.getHP())
-    if playerHP <= 0:
-        elv_cave_faint(player)
-    if enemyHP <= 0:
-        gold = enemy.getGold()
-        player.addGold(gold)
-        elv_cave_post_battle(player)
-    combat_start(player, enemy)
-    # Cave Exit Method
 
 
 def elv_cave_exit(player):
@@ -442,22 +388,18 @@ def elv_cave_post_battle(player):
     os.system("cls")
     print("What would you like to do?")
     print(" 1) Decend deeper into the cave 2) Exit the cave")
-    select = input("Selection: ")
-    if select == '1':
+    select = int(input("Selection: "))
+    if select == 1:
         new_enemy = Enemy()
-        combat_start(player, new_enemy)
-    if select == '2':
+        won = combat.start(player, new_enemy)
+        if won:
+            elv_cave_post_battle(player)
+        else:
+            print("Elv Cave Enter Battle Error")
+    if select == 2:
         town(player)
     elv_cave_post_battle(player)
     # Cave Death
-
-
-def elv_cave_faint(player):  # Player fainting under 0 HP
-    print(player.getName() + " has faded into existance, only the winds whisper " + player.getName() + "'s name now.")
-    print(" ")
-    print("[Game Over]")
-    os.system("pause")
-    exit(0)
 
 
 if __name__ == "__main__":
