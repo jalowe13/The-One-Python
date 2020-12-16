@@ -1,7 +1,12 @@
 import os
 import random
+import importlib
 
+# Importing my basic media module
+media = importlib.import_module('basic_media')
+combat = importlib.import_module('basic_combat')
 
+# Classes
 # Generalized Character Class for Player
 class Character:
     stats = {
@@ -20,23 +25,22 @@ class Character:
         "backpack": []
     }
 
-
     def __init__(self, username, password):
         self.stats["username"] = username
         self.stats["password"] = password
-    # Convert to int
+        # Convert to int
         self.stats["hp"] = int(self.stats["hp"])
         self.stats["max_hp"] = int(self.stats["max_hp"])
         self.stats["gold"] = int(self.stats["gold"])
         self.stats["bank_gold"] = int(self.stats["bank_gold"])
-        self.stats["heal_gold"]  = int(self.stats["heal_gold"])
+        self.stats["heal_gold"] = int(self.stats["heal_gold"])
         self.stats["flee_gold"] = int(self.stats["flee_gold"])
         self.stats["town"] = int(self.stats["town"])
         self.stats["level"] = int(self.stats["level"])
-    # Weapon
+        # Weapon
         self.stats["equipped_weapon"] = str(self.stats["equipped_weapon"])
         self.stats["dmg_base"] = int(self.stats["dmg_base"])
-    # Initial Load values
+        # Initial Load values
         self.stats["hp"] = 100
         self.stats["max_hp"] = 100
         self.stats["gold"] = 25
@@ -45,14 +49,15 @@ class Character:
         self.stats["flee_gold"] = 50
         self.stats["town"] = 1
         self.stats["level"] = 1
-       # print("Default Values for new Character " + username + "Loaded!") # For Loading Default Value Debug
+
+    # print("Default Values for new Character " + username + "Loaded!") # For Loading Default Value Debug
 
     def print_stats(self):  # Prints out stats of the character
         print("Printing Stats for User[" + self.stats["username"] + "]")
         print(self.stats)
 
-     #Getters for Stats
-    def getName(self): 
+    # Getters for Stats
+    def getName(self):
         username = str(self.stats.get("username"))
         return username
 
@@ -68,11 +73,11 @@ class Character:
     def getWeaponDmg(self):
         return int(self.stats["dmg_base"])
 
-    def attack(self): # Amount to calculate for damage
-     damage_mod = random.randint(1,20) # Random Damage Modifier
-     return int(int(self.stats["dmg_base"]) + damage_mod)
+    def attack(self):  # Amount to calculate for damage
+        damage_mod = random.randint(1, 20)  # Random Damage Modifier
+        return int(int(self.stats["dmg_base"]) + damage_mod)
 
-    def attacked(self,amount): # Passes in amount of damage taken
+    def attacked(self, amount):  # Passes in amount of damage taken
         newHealth = int(self.stats["hp"] - amount)
         self.stats["hp"] = newHealth
         print(self.getName() + " was hit for " + str(amount) + "HP")
@@ -88,8 +93,10 @@ class Character:
             os.system('cls')
         else:
             print(self.stats["username"] + " does not have enough gold")
-            print("Gold[" + str(self.stats["gold"]) + "] Gold Needed[" + str(self.stats["heal_gold"] - self.stats["gold"]) + "]")
+            print("Gold[" + str(self.stats["gold"]) + "] Gold Needed[" + str(
+                self.stats["heal_gold"] - self.stats["gold"]) + "]")
             os.system("pause")
+
     def equip(self):
         print(os.listdir("data\weapons"))
         print("Please enter the name of the item you would like to equip")
@@ -98,21 +105,22 @@ class Character:
         self.stats["equipped_weapon"] = equiped.load_name()
         self.stats["dmg_base"] = equiped.load_dmg()
         print(self.getName() + "has equipped the " + str(self.stats["equipped_weapon"]))
-    def store_backpack(item):
+
+    def store_backpack(self, item):
         backpack = self.stats["backpack"]
         backpack.append()
 
-    def addGold(self,amount): # Passes in amount of new gold
+    def addGold(self, amount):  # Passes in amount of new gold
         newGold = int(self.stats["gold"] + amount)
         self.stats["gold"] = newGold
         print(self.getName() + " gained " + str(amount) + "GP")
         os.system("pause")
+    # Generalized Enemy Class
 
 
-# Generalized Enemy Class
 class Enemy:
     stats = {
-        "name":"",
+        "name": "",
         "level_base": 0,
         "gold_base": 0,
         "exp_base": 0,
@@ -128,30 +136,30 @@ class Enemy:
         try:
             with open(enemy_path + '/' + random_enemy, "r") as enemy_values:
                 for line in enemy_values:
-                       newline = line.split('=')
-                       name = newline[0].rstrip()  # Removing newline characters
-                       enemy_value = newline[1].rstrip()
-                       self.stats[name] = enemy_value
+                    newline = line.split('=')
+                    name = newline[0].rstrip()  # Removing newline characters
+                    enemy_value = newline[1].rstrip()
+                    self.stats[name] = enemy_value
 
-        except IOError as e: #Error for not finding save file
+        except IOError as e:  # Error for not finding save file
             os.system('cls')
             print("Enemy Instantiation Save File Error")
-    # Local stats variables
+        # Local stats variables
         self.stats["level_base"] = int(self.stats["level_base"])
         self.stats["gold_base"] = int(self.stats["gold_base"])
         self.stats["exp_base"] = int(self.stats["exp_base"])
         self.stats["hp_base"] = int(self.stats["hp_base"])
         self.stats["dmg_base"] = int(self.stats["dmg_base"])
-    # Random stats modifier ex attack
-        stats_mod = random.randint(1,3)
-        self.stats["level_base"]  *= stats_mod
+        # Random stats modifier ex attack
+        stats_mod = random.randint(1, 3)
+        self.stats["level_base"] *= stats_mod
         self.stats["gold_base"] *= stats_mod
         self.stats["exp_base"] *= stats_mod
         self.stats["hp_base"] *= stats_mod
         self.stats["dmg_base"] *= stats_mod
 
-    #Getters for Stats
-    def getName(self): 
+    # Getters for Stats
+    def getName(self):
         return str(self.stats["name"])
 
     def getLevel(self):
@@ -163,45 +171,47 @@ class Enemy:
     def getGold(self):
         return int(self.stats["gold_base"])
 
-    def attack(self): # Amount to calculate for damage
-     damage_mod = random.randint(1,20) # Random Damage Modifier
-     return int(int(self.stats["dmg_base"]) + damage_mod)
-     
-    def attacked(self,amount): # Passes in amount of damage taken
+    def attack(self):  # Amount to calculate for damage
+        damage_mod = random.randint(1, 20)  # Random Damage Modifier
+        return int(int(self.stats["dmg_base"]) + damage_mod)
+
+    def attacked(self, amount):  # Passes in amount of damage taken
         newHealth = int(self.stats["hp_base"] - amount)
         self.stats["hp_base"] = newHealth
         print(self.getName() + " was hit for " + str(amount) + "HP")
         os.system("pause")
+    # Generalized Weapon Class
 
 
- # Generalized Weapon Class
 class Weapon:
     stats = {
-        "name":"Default_Weapon",
+        "name": "Default_Weapon",
         "dmg": 1
     }
-    def __init__(self,weapon):
+
+    def __init__(self, weapon):
         # Select Weapon File
         weapon_path = 'data\weapons'
         # Parsing Data
         try:
             with open(weapon_path + '/' + weapon + ".txt", "r") as weapon_values:
                 for line in weapon_values:
-                       newline = line.split('=')
-                       name = newline[0].rstrip()  # Removing newline characters
-                       weapon_value = newline[1].rstrip()
-                       self.stats[name] = weapon_value
-        except IOError as e: #Error for not finding save file
+                    newline = line.split('=')
+                    name = newline[0].rstrip()  # Removing newline characters
+                    weapon_value = newline[1].rstrip()
+                    self.stats[name] = weapon_value
+        except IOError as e:  # Error for not finding save file
             os.system('cls')
             print("Enemy Instantiation Save File Error")
 
     def load_name(self):
         return str(self.stats["name"])
+
     def load_dmg(self):
         return int(self.stats["dmg"])
 
-        
 
+# Methods
 def login():
     username = input("Username: ")
     password = input("Password: ")
@@ -216,7 +226,7 @@ def login():
                     name = newline[0].rstrip()  # Removing newline characters
                     value = newline[1].rstrip()
                     # Int converstion check
-                    if name  == "username" or name == "password" or name == "equipped_weapon":
+                    if name == "username" or name == "password" or name == "equipped_weapon":
                         player.stats[name] = value
                     else:
                         player.stats[name] = int(player.stats[name])
@@ -248,9 +258,9 @@ def create_account():
         for line in values:
             save.write(line)
     return player
+    # Saving file in town
 
 
-# Saving file in town
 def save_file(player):
     #   Save File Contents Of All Stats
     new_save = open(player.stats["username"] + ".txt", "w")
@@ -271,11 +281,12 @@ def save_file(player):
 
 
 def main():
-    version = "version 0.6.1 (2020-12-05) [Jacob Lowe]"
+    version = "version 0.6.3 (2020-12-13) [Jacob Lowe]"
     os.system("title The One [" + version + "]")
-    print("This game is best in fullscreen...")
+    print("This game is best in fullscreen [Alt + Enter]")
     print("[Project Notice][This is not a completed Version of the Game]")
-    print("The following program only has the following parts implemented for the ECE 2524 Project to correctly show the UNIX System Administration work involved, such as file management")
+    print(
+        "The following program only has the following parts implemented for the ECE 2524 Project to correctly show the UNIX System Administration work involved, such as file management")
     print("--------------------")
     print("Features Implemented")
     print("--------------------")
@@ -291,6 +302,7 @@ def main():
     print(title_file.read())
     print('Python Edition ')
     print(version)
+    media.printimage("title_valley.txt")
     print('1) Login')
     print('2) Create Account')
     print('3) Exit')
@@ -298,7 +310,6 @@ def main():
     # Title Selection
     if title_selection == '3':
         exit(0)
-
     if title_selection == '2':
         p = create_account()
         os.system('cls')
@@ -309,79 +320,35 @@ def main():
         town(loaded_player)
     os.system("cls")
     main()
+    # Area One
 
 
-# Area One
 def town(player):
     os.system('cls')
-    print(" ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»")
-    print(" º What would you like to do?  º")
-    print(".ÌÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹")
-   # print(" º 1) Travel to the next town  º")
-   # print(".º                             º")
-   # print(" º 2) Elvendale Weapon Shop    º")
-   # print(".º                             º")
-   # print(" º 3) Elvendale Armor Shop     º")
-   # print(".º                             º")
-   # print(" º 4) Elvendale Trading Post   º")
-   # print(".º                             º")
-    print(" º 5) Local Elven-dale Cave    º")
-   # print(".º                             º")
-   # print(" º 6) Skill Chart              º")
-   # print(".º                             º")
-    #print(" º 7) World Bank               º")
-   # print(".º                             º")
-   # print(" º 8) Quest's                  º")
-   # print(".º                             º")
-    print(" º 9) Save                     º")
-   # print(" º                             º")
-    print(" º 10) Heal                    º")
-   # print(" º                             º")
-   # print(" º 98) " + player.stats["username"] + "'s Inventory º")
-    print(" ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
-    print(".")
-    print(".")
-    print(".")
-    print(".          [" + player.stats["username"] + "]")
-    print(".               _")
-    print(".              ( )")
-    print(".               I")
-    print(".              YIY")
-    print(".               I")
-    print(".              I I")
-    print(".")
-    print(".    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»")
+    media.printimage("pico.txt")
+    print(" ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»      [" + player.stats["username"] + "]")
+    print(" º What would you like to do?")
+    print(".ÌÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹                    _")
+    print(" º 1) Local Elven-dale Cave    º                   ( )")
+    print(" º 2) Save                     º                   YIY")
+    print(" º 3) Heal                    º                     I")
+    print(" ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼                   I I")
     print(".    º HP[" + str(player.stats["hp"]) + "] ºGold[" + str(player.stats["gold"]) + "] º")
     print(".    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
     print("     [Currently Equipped][" + player.getWeapon() + "] [Base Damage] [" + str(player.getWeaponDmg()) + "]")
-    print(".    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
-    print(".")
-    print(".")
-    print(".")
-    print(".")
-    print(".")
-    print(".")
-    print(".")
-    print(".")
-    print(".")
-    print(" ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»")
-    print("   Currently logged in as " + player.stats["username"])
-    print(".ÌÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹")
-    print(" º 99) Log out                           º")
-    print(" ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
-    print(".")
-    town_selection = input("Selection: ")
+    town_selection = int(input("Selection: "))
 
     #   Selection statements
-    if town_selection == '10':
+    if town_selection == 1:
+        elv_cave_enter(player)
+    if town_selection == 2:
+        player = save_file(player)
+        media.savesound()
+        town(player)
+    if town_selection == 3:
         player.heal()
         town(player)
-    if town_selection == '5':
-        elv_cave_enter(player)
-    if town_selection == '9':
-        player = save_file(player)
-        town(player)
-    if town_selection == '99':
+    if town_selection == 99:
         exit(0)
     else:
         print("Command not found")
@@ -393,68 +360,19 @@ def elv_cave_enter(player):
     os.system('cls')
     print("You step into the cave")
     current_enemy = Enemy()
-    # print(current_enemy.stats) #debugging stats
+    print(current_enemy.stats) #debugging stats
+    media.printimage("cave.txt")
     os.system("pause")
-    combat_start(player,current_enemy)
-
+    won = combat.start(player, current_enemy)
+    if won:
+        elv_cave_post_battle(player)
+    else:
+        print("Elv Cave Enter Battle Error")
     # Combat Start Tasks and Randomization
-def combat_start(player,enemy):
-    os.system('cls')
-    print("[" + player.getName() + "] [Level " + str(player.getLevel()) + "] [" + str(player.getHP()) + "HP]  [" + enemy.getName() + "][Level" + str(enemy.getLevel()) + "] [" + str(enemy.getHP()) + "HP]")
-    print("[Currently Equipped][" + player.getWeapon() + "] [Base Damage] [" + str(player.getWeaponDmg()) + "]")
-    print("")
-    print( "What would you like to do?")
-    print("")
-    print("")
-    print(" 1)Attack")
-    print(" 2)Equip")
-    print(" 3)Run")
-    combat_selection = input("Selection: ")
-    if combat_selection == '1': # Attack
-        combat_player_attack(player,enemy)
-    if combat_selection == '2': # Equip
-        player.equip()
-        combat_start(player,enemy)
-    if combat_selection == '3': # Run
-        if (player.getHP() > enemy.getHP()):
-            print(player.getName() + " runs away from " + enemy.getName())
-            os.system("pause")
-            elv_cave_exit(player)
-        else:
-            print("The " + enemy.getName() + " strikes fear into your heart. You cannot escape")
-            os.system("pause")
-            combat_start(player,enemy)
-    combat_start(player,enemy)
 
     # Player and Enemy Attacks
-def combat_player_attack(player,enemy):
-    os.system("cls")
-    damage = player.attack()
-    print(player.getName() + " attacked " + enemy.getName())
-    enemy.attacked(damage)
-    enemyHP = int(enemy.getHP())
-    if enemyHP <= 0:
-       gold = enemy.getGold()
-       player.addGold(gold)
-       elv_cave_post_battle(player)
-    else:
-        combat_enemy_attack(player,enemy)
+    # Player attack portion of the cave
 
-
-def combat_enemy_attack(player,enemy):
-    os.system("cls")
-    damage = enemy.attack()
-    print(enemy.getName() + " attacked " + player.getName())
-    player.attacked(damage)
-    enemyHP = int(enemy.getHP())
-    playerHP = int(player.getHP())
-    if playerHP <=0:
-        elv_cave_faint(player)
-    if enemyHP <= 0:
-        gold = enemy.getGold()
-        player.addGold(gold)
-        elv_cave_post_battle(player)
-    combat_start(player,enemy)
 
 
 
@@ -463,26 +381,25 @@ def elv_cave_exit(player):
     print("You step out of the cave")
     os.system("pause")
     town(player)
+    # Cave Exit Post Battle
 
 
 def elv_cave_post_battle(player):
     os.system("cls")
     print("What would you like to do?")
     print(" 1) Decend deeper into the cave 2) Exit the cave")
-    select = input("Selection: ")
-    if select == '1':
+    select = int(input("Selection: "))
+    if select == 1:
         new_enemy = Enemy()
-        combat_start(player,new_enemy)
-    if select == '2':
+        won = combat.start(player, new_enemy)
+        if won:
+            elv_cave_post_battle(player)
+        else:
+            print("Elv Cave Enter Battle Error")
+    if select == 2:
         town(player)
     elv_cave_post_battle(player)
-
-def elv_cave_faint(player): # Player fainting under 0 HP
-    print(player.getName() + " has faded into existance, only the winds whisper " + player.getName() + "'s name now.")
-    print(" ")
-    print("[Game Over]")
-    os.system("pause")
-    exit(0)
+    # Cave Death
 
 
 if __name__ == "__main__":
