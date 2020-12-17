@@ -111,6 +111,7 @@ class Character:
         backpack.append()
 
     def addGold(self, amount):  # Passes in amount of new gold
+        os.system("cls")
         newGold = int(self.stats["gold"] + amount)
         self.stats["gold"] = newGold
         print(self.getName() + " gained " + str(amount) + "GP")
@@ -281,7 +282,7 @@ def save_file(player):
 
 
 def main():
-    version = "version 0.6.3 (2020-12-13) [Jacob Lowe]"
+    version = "version 0.6.4 (2020-12-16) [Jacob Lowe]"
     os.system("title The One [" + version + "]")
     print("This game is best in fullscreen [Alt + Enter]")
     print("[Project Notice][This is not a completed Version of the Game]")
@@ -336,21 +337,23 @@ def town(player):
     print(".    º HP[" + str(player.stats["hp"]) + "] ºGold[" + str(player.stats["gold"]) + "] º")
     print(".    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼")
     print("     [Currently Equipped][" + player.getWeapon() + "] [Base Damage] [" + str(player.getWeaponDmg()) + "]")
-    town_selection = int(input("Selection: "))
 
-    #   Selection statements
-    if town_selection == 1:
-        elv_cave_enter(player)
-    if town_selection == 2:
-        player = save_file(player)
-        media.savesound()
-        town(player)
-    if town_selection == 3:
-        player.heal()
-        town(player)
-    if town_selection == 99:
-        exit(0)
-    else:
+    try:
+        town_selection = int(input("Selection: "))
+
+        #   Selection statements
+        if town_selection == 1:
+            elv_cave_enter(player)
+        if town_selection == 2:
+            player = save_file(player)
+            media.savesound()
+            town(player)
+        if town_selection == 3:
+            player.heal()
+            town(player)
+        if town_selection == 99:
+            exit(0)
+    except ValueError:
         print("Command not found")
         os.system("pause")
         town(player)
@@ -386,9 +389,13 @@ def elv_cave_exit(player):
 
 def elv_cave_post_battle(player):
     os.system("cls")
+    print("[" + player.getName() + "] [Level " + str(player.getLevel()) + "] [" + str(player.getHP()) + "HP]")
     print("What would you like to do?")
     print(" 1) Decend deeper into the cave 2) Exit the cave")
-    select = int(input("Selection: "))
+    try:
+        select = int(input("Selection: "))
+    except ValueError:
+        elv_cave_post_battle(player)
     if select == 1:
         new_enemy = Enemy()
         won = combat.start(player, new_enemy)
@@ -398,7 +405,8 @@ def elv_cave_post_battle(player):
             print("Elv Cave Enter Battle Error")
     if select == 2:
         town(player)
-    elv_cave_post_battle(player)
+    else:
+        elv_cave_post_battle(player)
     # Cave Death
 
 

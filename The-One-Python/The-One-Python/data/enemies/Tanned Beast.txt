@@ -1,6 +1,6 @@
 name=Tanned Beast
 level_base=1
 gold_base=150
-exp_base=0
+exp_base=10
 hp_base=40
 dmg_base=20
