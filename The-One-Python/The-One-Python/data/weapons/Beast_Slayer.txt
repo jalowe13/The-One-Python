@@ -1,2 +1,0 @@
-name=Beast_Slayer
-dmg=50

@@ -1,2 +1,0 @@
-name=Iron_Sword
-dmg=15

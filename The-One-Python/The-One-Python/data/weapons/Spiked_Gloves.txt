@@ -1,2 +1,0 @@
-name=Spiked_Gloves
-dmg=7

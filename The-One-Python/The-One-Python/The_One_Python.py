@@ -195,7 +195,7 @@ class Weapon:
         weapon_path = 'data\weapons'
         # Parsing Data
         try:
-            with open(weapon_path + '/' + weapon + ".txt", "r") as weapon_values:
+            with open(weapon_path + '/' + weapon, "r") as weapon_values:
                 for line in weapon_values:
                     newline = line.split('=')
                     name = newline[0].rstrip()  # Removing newline characters
