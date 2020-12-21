@@ -7,7 +7,6 @@ media = importlib.import_module('basic_media')
 
 
 def start(player, enemy):
-    os.system('cls')
     print("[" + player.get_name() + "] [Level " + str(player.get_level()) + "] [" + str(
         player.get_hp()) + "HP]  [" + enemy.get_name() + "][Level" + str(enemy.get_level()) + "] [" + str(
         enemy.get_hp()) + "HP]")
@@ -21,9 +20,8 @@ def start(player, enemy):
     print(" 3)Run")
     combat_selection = input("Selection: ")
     if combat_selection == '1':  # Attack
-        won = player_move(player, enemy)
-        if won:
-            return True
+        player_move(player, enemy)
+        return True
     if combat_selection == '2':  # Equip
         player.equip()
         start(player, enemy)
@@ -36,7 +34,8 @@ def start(player, enemy):
             print("The " + enemy.get_name() + " strikes fear into your heart. You cannot escape")
             os.system("pause")
             start(player, enemy)
-    start(player, enemy)
+    else:
+        start(player, enemy)
 
 
 def player_move(player, enemy):
@@ -51,11 +50,7 @@ def player_move(player, enemy):
         player.add_gold(gold)
         return True
     else:
-        kill = enemy_move(player, enemy)
-        if kill:
-            faint(player)
-        else:
-            return True
+        enemy_move(player, enemy)
 
     # Enemy attack portion of the cave
 
@@ -69,21 +64,24 @@ def enemy_move(player, enemy):
     enemy_hp = int(enemy.get_hp())
     player_hp = int(player.get_hp())
     if player_hp <= 0:
-        return True
+        faint(player)
     if enemy_hp <= 0:
         gold = enemy.get_gold()
         player.add_gold(gold)
-        return False
-    start(player, enemy)
+    else:
+        os.system("cls")
+        start(player, enemy)
 
 
 def faint(player):  # Player fainting under 0 HP
+    os.system("cls")
     print(player.get_name() + " has faded into existence, only the winds whisper " + player.get_name() + "'s name now.")
     print(player.get_name() + " has lost all of their gold.")
     print(" ")
     player.set_gold(9999)
     player.heal(1)
     player.set_gold(0)
+    player.set_cave_level(1)
     game.save_file(player)
     print(" ")
     print("[Game Over]")
@@ -92,3 +90,4 @@ def faint(player):  # Player fainting under 0 HP
     os.system("pause")
     os.system("cls")
     game.main()
+

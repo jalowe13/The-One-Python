@@ -22,6 +22,7 @@ class Character:
         "flee_gold": 0,
         "town": 1,
         "level": 1,
+        "max_cave_level": 1,
         "equipped_weapon": "Fists",
         "dmg_base": 1,
         "backpack": []
@@ -80,6 +81,16 @@ class Character:
 
     def get_bank_gold(self):
         return int(self.stats["bank_gold"])
+
+    def get_max_cave_level(self):
+        return int(self.stats["max_cave_level"])
+
+    def inc_cave_level(self):
+        new_level = int(self.stats["max_cave_level"])
+        self.stats["max_cave_level"] = new_level + 1
+
+    def set_cave_level(self, new_level):
+        self.stats["max_cave_level"] = new_level
 
     def attack(self):  # Amount to calculate for damage
         damage_mod = random.randint(1, 20)  # Random Damage Modifier
@@ -294,6 +305,7 @@ def save_file(player):
     new_save.write("flee_gold=" + str(player.stats["flee_gold"]) + "\n")
     new_save.write("town=" + str(player.stats["town"]) + "\n")
     new_save.write("level=" + str(player.stats["level"]) + "\n")
+    new_save.write("max_cave_level=" + str(player.stats["max_cave_level"]) + "\n")
     new_save.write("equipped_weapon=" + str(player.stats["equipped_weapon"]) + "\n")
     new_save.write("dmg_base=" + str(player.stats["dmg_base"]) + "\n")
     print("Saved")
@@ -301,7 +313,7 @@ def save_file(player):
 
 
 def main():
-    version = "version 0.7 (2020-12-17) [Jacob Lowe]"
+    version = "version 0.7.1 (2020-12-21) [Jacob Lowe]"
     os.system("title The One [" + version + "]")
     print("This game is best in fullscreen [Alt + Enter]")
     print("[Project Notice][This is not a completed Version of the Game]")
@@ -392,11 +404,11 @@ def elv_cave_enter(player):
     current_enemy = Enemy()
     media.printimage("cave.txt")
     os.system("pause")
-    won = combat.start(player, current_enemy)
-    if won:
-        elv_cave_post_battle(player)
-    else:
-        print("Elv Cave Enter Battle Error")
+    print("Cave Level [" + str(player.get_max_cave_level()) + "]")
+    combat.start(player, current_enemy)
+    print("Combat won and exited correctly")
+    os.system("pause")
+    elv_cave_post_battle(player)
     # Combat Start Tasks and Randomization
 
     # Player and Enemy Attacks
@@ -412,6 +424,7 @@ def elv_cave_exit(player):
 
 
 def elv_cave_post_battle(player):
+    player.inc_cave_level()
     os.system("cls")
     print("[" + player.get_name() + "] [Level " + str(player.get_level()) + "] [" + str(player.get_hp()) + "HP]")
     print("What would you like to do?")
@@ -422,11 +435,13 @@ def elv_cave_post_battle(player):
         elv_cave_post_battle(player)
     if select == 1:
         new_enemy = Enemy()
+        os.system("cls")
+        print("Cave Level [" + str(player.get_max_cave_level()) + "]")
         won = combat.start(player, new_enemy)
         if won:
             elv_cave_post_battle(player)
         else:
-            print("Elv Cave Enter Battle Error")
+            print("Error in Win Condition")
     if select == 2:
         town(player)
     else:
