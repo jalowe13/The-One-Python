@@ -1,11 +1,9 @@
 import os
 import random
-import importlib
+import pyautogui
+from . import mechanics
 
-# Importing my basic media module
-media = importlib.import_module('basic_media')
-combat = importlib.import_module('basic_combat')
-bank = importlib.import_module('bank')
+print("Importing Main Game")
 
 
 # Classes
@@ -120,7 +118,7 @@ class Character:
             self.stats["hp"] = self.stats["max_hp"]
 
     def equip(self):
-        print(os.listdir("data\weapons"))
+        print(os.listdir("game\data\weapons"))
         print("Please enter the name of the item you would like to equip")
         weapon_name = input("Selection: ")
         equipped = Weapon(weapon_name)
@@ -161,7 +159,7 @@ class Enemy:
 
     def __init__(self):
         # Select Random Enemy File
-        enemy_path = 'data\enemies'
+        enemy_path = 'game\data\enemies'
         random_enemy = random.choice(os.listdir(enemy_path))
         # Parsing Data
         try:
@@ -222,7 +220,7 @@ class Weapon:
 
     def __init__(self, weapon):
         # Select Weapon File
-        weapon_path = 'data\weapons'
+        weapon_path = 'game\data\weapons'
         # Parsing Data
         try:
             with open(weapon_path + '/' + weapon, "r") as weapon_values:
@@ -250,7 +248,7 @@ def login():
     player = Character(username, password)
     # Parsing Save File
     try:
-        with open(username + ".txt", "r") as values:
+        with open("game/data/saves/" + username, "r") as values:
             for line in values:
                 if correct:
                     newline = line.split('=')
@@ -266,13 +264,17 @@ def login():
                     if name == "password" and value != password:
                         correct = 0
                         os.system('cls')
-                        print("Password incorrect")
+                        print("*******Password for " + username + " was not correct*******")
                         player.stats["password"] = "DENIED"
-                        main()
+                        os.system("pause")
+                        os.system("cls")
+                        launch()
     except IOError as e:
         os.system('cls')
         print("*******Save file for " + username + " not found*******")
-        main()
+        os.system("pause")
+        os.system("cls")
+        launch()
     return player
 
 
@@ -281,11 +283,11 @@ def create_account():
     password = input('What would you like your password to be?: ')
 
     #   Save File Contents
-    save = open(username + ".txt", "w")
+    save = open("game/data/saves/" + username, "w")
     save.write("username=" + username + "\n")
     save.write("password=" + password + "\n")
     player = Character(username, password)
-    with open("data/" + "default_values.txt") as values:
+    with open("game/data/" + "default_values.txt") as values:
         for line in values:
             save.write(line)
     return player
@@ -294,7 +296,7 @@ def create_account():
 
 def save_file(player):
     #   Save File Contents Of All Stats
-    new_save = open(player.stats["username"] + ".txt", "w")
+    new_save = open("game/data/saves/" + player.stats["username"], "w")
     new_save.write("username=" + player.stats["username"] + "\n")
     new_save.write("password=" + player.stats["password"] + "\n")
     new_save.write("hp=" + str(player.stats["hp"]) + "\n")
@@ -312,29 +314,15 @@ def save_file(player):
     return player
 
 
-def main():
-    version = "version 0.7.1 (2020-12-21) [Jacob Lowe]"
+def launch():
+    # os.system("pause") # Uncomment for debugging module loading
+    os.system("cls")
+    version = "version 0.7.2 (2020-12-21) [Jacob Lowe]"
     os.system("title The One [" + version + "]")
-    print("This game is best in fullscreen [Alt + Enter]")
-    print("[Project Notice][This is not a completed Version of the Game]")
-    print(
-        "The following program only has the following parts implemented for the ECE 2524 Project to correctly show the UNIX System Administration work involved, such as file management")
-    print("--------------------")
-    print("Features Implemented")
-    print("--------------------")
-    print("- File Creation, Updating, and Reference")
-    print("- Main Town")
-    print("- Heal at Town")
-    print("- Save at Town")
-    print("- Basic Combat")
-    print("- Equip in Combat")
-    os.system("pause")
-    os.system('cls')
-    title_file = open("art/" + "titleart.txt", 'r')  # Opening the file in a different directory
-    print(title_file.read())
+    mechanics.basic_media.printimage("titleart.txt")
     print('Python Edition ')
     print(version)
-    media.printimage("title_valley.txt")
+    mechanics.basic_media.printimage("title_valley.txt")
     print('1) Login')
     print('2) Create Account')
     print('3) Exit')
@@ -351,13 +339,13 @@ def main():
         os.system('cls')
         town(loaded_player)
     os.system("cls")
-    main()
+    launch()
     # Area One
 
 
 def town(player):
     os.system('cls')
-    media.printimage("pico.txt")
+    mechanics.basic_media.printimage("pico.txt")
     print(" ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»      [" + player.stats["username"] + "]")
     print(" º What would you like to do?")
     print(".ÌÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ")
@@ -375,6 +363,7 @@ def town(player):
     try:
         town_selection = int(input("Selection: "))
 
+
         #   Selection statements
         if town_selection == 1:
             elv_cave_enter(player)
@@ -383,15 +372,15 @@ def town(player):
             town(player)
         if town_selection == 3:
             player = save_file(player)
-            media.savesound()
+            mechanics.basic_media.savesound()
             town(player)
         if town_selection == 4:
             player.heal(0)
             town(player)
         if town_selection == 5:
-            bank.enter(player)
+            mechanics.bank.enter(player)
         if town_selection == 9:
-            exit(0)
+            launch()
     except ValueError:
         print("Command not found")
         os.system("pause")
@@ -402,12 +391,11 @@ def elv_cave_enter(player):
     os.system('cls')
     print("You step into the cave")
     current_enemy = Enemy()
-    media.printimage("cave.txt")
+    mechanics.basic_media.printimage("cave.txt")
     os.system("pause")
+    os.system('cls')
     print("Cave Level [" + str(player.get_max_cave_level()) + "]")
-    combat.start(player, current_enemy)
-    print("Combat won and exited correctly")
-    os.system("pause")
+    mechanics.basic_combat.start(player, current_enemy)
     elv_cave_post_battle(player)
     # Combat Start Tasks and Randomization
 
@@ -437,7 +425,7 @@ def elv_cave_post_battle(player):
         new_enemy = Enemy()
         os.system("cls")
         print("Cave Level [" + str(player.get_max_cave_level()) + "]")
-        won = combat.start(player, new_enemy)
+        won = mechanics.basic_combat.start(player, new_enemy)
         if won:
             elv_cave_post_battle(player)
         else:
@@ -449,5 +437,4 @@ def elv_cave_post_battle(player):
     # Cave Death
 
 
-if __name__ == "__main__":
-    main()
+print("Main Game imported!")

@@ -1,15 +1,15 @@
 # Bank module
 import os
-import importlib
+from . import basic_media
+from .. import title
 
-game = importlib.import_module('The_One_Python')
-media = importlib.import_module('basic_media')
+print("Importing Bank...")
 
 
 #   Enter into bank
 def enter(player):
     os.system("cls")
-    media.printimage("bank_greeting_art.txt")
+    basic_media.printimage("bank_greeting_art.txt")
     print("Current Gold: " + str(player.get_gold()) + "     Bank Gold: " + str(player.get_bank_gold()))
     print("1) Deposit       2) Withdraw         3) Exit")
     try:  # Deposit or withdraw
@@ -19,7 +19,7 @@ def enter(player):
         if selection == 2:
             withdraw(player)
         if selection == 3:
-            game.town(player)
+            title.town(player)
     except ValueError:
         enter(player)
 
@@ -27,7 +27,7 @@ def enter(player):
 #   Deposit amount
 def deposit(player):
     os.system("cls")
-    media.printimage("bank_withdraw_art.txt")
+    basic_media.printimage("bank_withdraw_art.txt")
     current_bank_gold = player.get_bank_gold()
     current_gold = player.get_gold()
     try:  # Try to deposit amount
@@ -51,7 +51,7 @@ def deposit(player):
 #   Withdraw amount
 def withdraw(player):
     os.system("cls")
-    media.printimage("bank_withdraw_art.txt")
+    basic_media.printimage("bank_withdraw_art.txt")
     current_bank_gold = player.get_bank_gold()
     current_gold = player.get_gold()
     try:  # Try to deposit amount
@@ -70,3 +70,6 @@ def withdraw(player):
             enter(player)
     except ValueError:  # Could not transfer to Int
         enter(player)
+
+
+print("Bank Imported!")
