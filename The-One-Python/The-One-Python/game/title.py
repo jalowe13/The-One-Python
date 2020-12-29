@@ -1,6 +1,6 @@
 import os
 import random
-import pyautogui
+# import pyautogui
 from . import mechanics
 
 print("Importing Main Game")
