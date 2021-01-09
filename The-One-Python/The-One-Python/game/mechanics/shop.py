@@ -4,7 +4,7 @@ print("Importing Shop...")
 
 
 def enter(player):
-    os.system("cls")
+    os.system("cls||clear")
     print("Welcome to the Town Shop!")
     print("What would you like to do?")
     print("1) Buy       2) Sell         3) Exit")
@@ -32,7 +32,7 @@ def sell(player):
 
 
 def exit_shop(player):
-    os.system("cls")
+    os.system("cls||clear")
     print(player.get_name() + " has exited the shop")
     os.system("pause")
     title.town(player)

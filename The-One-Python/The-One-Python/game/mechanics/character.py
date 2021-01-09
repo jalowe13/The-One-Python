@@ -104,7 +104,7 @@ class Character:
                 self.stats["hp"] = self.stats["max_hp"]
                 print(self.stats["username"] + " has healed " + str(hp_dif) + " HP")
                 os.system("pause")
-                os.system('cls')
+                os.system("cls||clear")
             else:
                 print(self.stats["username"] + " does not have enough gold")
                 print("Gold[" + str(self.stats["gold"]) + "] Gold Needed[" + str(
@@ -120,14 +120,14 @@ class Character:
         equipped = Weapon(weapon_name)
         self.stats["equipped_weapon"] = equipped.load_name()
         self.stats["dmg_base"] = equipped.load_dmg()
-        print(self.get_name() + "has equipped the " + str(self.stats["equipped_weapon"]))
+        print(self.get_name() + " has equipped the " + str(self.stats["equipped_weapon"]))
 
     def store_backpack(self, item):
         backpack = self.stats["backpack"]
         backpack.append()
 
     def add_gold(self, amount):  # Passes in amount of new gold
-        os.system("cls")
+        os.system("cls||clear")
         new_gold = int(self.stats["gold"] + amount)
         self.stats["gold"] = new_gold
         print(self.get_name() + " gained " + str(amount) + "GP")

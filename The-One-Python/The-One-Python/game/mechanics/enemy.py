@@ -26,7 +26,7 @@ class Enemy:
                     self.stats[name] = enemy_value
 
         except IOError as e:  # Error for not finding save file
-            os.system('cls')
+            os.system("cls||clear")
             print("Enemy Instantiation Save File Error")
         # Local stats variables
         self.stats["level_base"] = int(self.stats["level_base"])

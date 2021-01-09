@@ -9,8 +9,8 @@ print("Importing Main Game")
 
 #   VERSION UPDATE CONTROL
 #   Change these values for each version update
-version_number = "0.7.3"  # version number for each commit
-version_date = "2021-01-02"  # the date for each commit version
+version_number = "0.7.4"  # version number for each commit
+version_date = "2021-01-09"  # the date for each commit version
 #   VERSION UPDATE CONTROL
 
 
@@ -36,17 +36,17 @@ def login():
 
                     if name == "password" and value != password:
                         correct = 0
-                        os.system('cls')
+                        os.system("cls||clear")
                         print("*******Password for " + username + " was not correct*******")
                         player.stats["password"] = "DENIED"
                         os.system("pause")
-                        os.system("cls")
+                        os.system("cls||clear")
                         launch()
     except IOError as e:
-        os.system('cls')
+        os.system("cls||clear")
         print("*******Save file for " + username + " not found*******")
         os.system("pause")
-        os.system("cls")
+        os.system("cls||clear")
         launch()
     return player
 
@@ -90,7 +90,7 @@ def save_file(player):
 def launch():
     print("Launched")
     # os.system("pause")  # Uncomment for debugging module loading
-    os.system("cls")
+    os.system("cls||clear")
     os.system("title The One [" + version_number + "]")
     mechanics.basic_media.printimage("titleart.txt")
     print('Python Edition ')
@@ -105,19 +105,19 @@ def launch():
         exit(0)
     if title_selection == '2':
         p = create_account()
-        os.system('cls')
+        os.system("cls||clear")
         town(p)
     if title_selection == '1':
         loaded_player = login()
-        os.system('cls')
+        os.system("cls||clear")
         town(loaded_player)
-    os.system("cls")
+    os.system("cls||clear")
     launch()
     # Area One
 
 
 def town(player):
-    os.system('cls')
+    os.system("cls||clear")
     mechanics.basic_media.printimage("pico.txt")
     print(" ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»      [" + player.stats["username"] + "]")
     print(" º What would you like to do?")
@@ -153,7 +153,7 @@ def town(player):
         if town_selection == 5:
             mechanics.bank.enter(player)
         if town_selection == 6:
-            os.system("cls")
+            os.system("cls||clear")
             print(player.get_name() + " has entered the shop")
             os.system("pause")
             mechanics.shop.enter(player)
@@ -166,12 +166,12 @@ def town(player):
 
 
 def elv_cave_enter(player):
-    os.system('cls')
+    os.system("cls||clear")
     print("You step into the cave")
     current_enemy = Enemy()
     mechanics.basic_media.printimage("cave.txt")
     os.system("pause")
-    os.system('cls')
+    os.system("cls||clear")
     print("Cave Level [" + str(player.get_max_cave_level()) + "]")
     mechanics.basic_combat.start(player, current_enemy)
     elv_cave_post_battle(player)
@@ -182,7 +182,7 @@ def elv_cave_enter(player):
 
 
 def elv_cave_exit(player):
-    os.system("cls")
+    os.system("cls||clear")
     print("You step out of the cave")
     os.system("pause")
     town(player)
@@ -191,7 +191,7 @@ def elv_cave_exit(player):
 
 def elv_cave_post_battle(player):
     player.inc_cave_level()
-    os.system("cls")
+    os.system("cls||clear")
     print("[" + player.get_name() + "] [Level " + str(player.get_level()) + "] [" + str(player.get_hp()) + "HP]")
     print("What would you like to do?")
     print(" 1) Decend deeper into the cave 2) Exit the cave")
@@ -201,7 +201,7 @@ def elv_cave_post_battle(player):
         elv_cave_post_battle(player)
     if select == 1:
         new_enemy = Enemy()
-        os.system("cls")
+        os.system("cls||clear")
         print("Cave Level [" + str(player.get_max_cave_level()) + "]")
         won = mechanics.basic_combat.start(player, new_enemy)
         if won:

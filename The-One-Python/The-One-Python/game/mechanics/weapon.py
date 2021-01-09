@@ -19,7 +19,7 @@ class Weapon:
                     weapon_value = newline[1].rstrip()
                     self.stats[name] = weapon_value
         except IOError as e:  # Error for not finding save file
-            os.system('cls')
+            os.system("cls||clear")
             print("Enemy Instantiation Save File Error")
 
     def load_name(self):

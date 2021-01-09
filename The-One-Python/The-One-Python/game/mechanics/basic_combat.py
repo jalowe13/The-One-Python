@@ -20,11 +20,11 @@ def start(player, enemy):
     print(" 3)Run")
     combat_selection = input("Selection: ")
     if combat_selection == '1':  # Attack
-        os.system("cls")
+        os.system("cls||clear")
         player_move(player, enemy)
         return True
     if combat_selection == '2':  # Equip
-        os.system("cls")
+        os.system("cls||clear")
         player.equip()
         start(player, enemy)
     if combat_selection == '3':  # Run
@@ -41,7 +41,7 @@ def start(player, enemy):
 
 
 def player_move(player, enemy):
-    os.system("cls")
+    os.system("cls||clear")
     damage = player.attack()
     print(player.get_name() + " attacked " + enemy.get_name())
     basic_media.hitenemy()
@@ -58,7 +58,7 @@ def player_move(player, enemy):
 
 
 def enemy_move(player, enemy):
-    os.system("cls")
+    os.system("cls||clear")
     damage = enemy.attack()
     print(enemy.get_name() + " attacked " + player.get_name())
     basic_media.enemyhit()
@@ -71,12 +71,12 @@ def enemy_move(player, enemy):
         gold = enemy.get_gold()
         player.add_gold(gold)
     else:
-        os.system("cls")
+        os.system("cls||clear")
         start(player, enemy)
 
 
 def faint(player):  # Player fainting under 0 HP
-    os.system("cls")
+    os.system("cls||clear")
     print(player.get_name() + " has faded into existence, only the winds whisper " + player.get_name() + "'s name now.")
     print(player.get_name() + " has lost all of their gold.")
     print(" ")
@@ -90,7 +90,7 @@ def faint(player):  # Player fainting under 0 HP
     basic_media.printimage("death.txt")
     basic_media.exitsound()
     os.system("pause")
-    os.system("cls")
+    os.system("cls||clear")
     title.launch()
 
 
