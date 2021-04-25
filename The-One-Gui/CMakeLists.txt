@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.5)
 project(TheOne CXX)
 
 set(main_src
-  main.cpp
+  WinMain.cpp
 )
 
-add_executable(main WIN32 ${main_src})
-set_property(TARGET main PROPERTY CXX_STANDARD 11)
+add_executable(WinMain ${main_src})
+set_property(TARGET WinMain PROPERTY CXX_STANDARD 11)
