@@ -1,6 +1,7 @@
 #include <iostream>
 // Windows Header Files:
 #include <windows.h>
+#include <windowsx.h>
 
 // C RunTime Header Files:
 #include <stdlib.h>
@@ -18,6 +19,13 @@
 #include <sstream>
 #include <string>
 
+//Graphics
+#include "Graphics.h"
+
+Graphics* graphics;
+
+float xPos = 0;
+float yPos = 0;
 
 //Message Handling
 LRESULT CALLBACK WindowProc(
@@ -55,6 +63,24 @@ LRESULT CALLBACK WindowProc(
     case WM_KEYUP:
         SetWindowText(hWindow, "The One");
         break;
+    case WM_PAINT:
+        {
+        graphics->BeginDraw();
+        graphics->ClearScreen(0.0f, 0.0, 0.0f);
+        graphics->DrawCircle(xPos, yPos, 20, 1.0, 0.0, 0.0, 1.0);
+        graphics->EndDraw();
+        break;
+         }
+    case WM_MOUSEMOVE:
+    {
+        xPos = GET_X_LPARAM(lParam);
+        yPos = GET_Y_LPARAM(lParam);
+        graphics->BeginDraw();
+        graphics->ClearScreen(0.0f, 0.0, 0.0f);
+        graphics->DrawCircle(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 20, 1.0, 0.0, 0.0, 1.0);
+        graphics->EndDraw();
+        break;
+    }
     default:
         return DefWindowProc(hWindow, uMsg, wParam, lParam);
     }
@@ -74,14 +100,14 @@ int CALLBACK WinMain(
     LPCSTR pClassName = "newwindow";
     WNDCLASSEX wc = {0};
     wc.cbSize = sizeof( wc );
-    wc.style = CS_OWNDC;
+    wc.style = CS_HREDRAW | CS_VREDRAW;
     wc.lpfnWndProc = WindowProc;
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
     wc.hInstance = hInstance;
     wc.hIcon = nullptr;
     wc.hCursor = nullptr;
-    wc.hbrBackground = nullptr;
+    wc.hbrBackground = (HBRUSH) COLOR_WINDOW;
     wc.lpszMenuName = nullptr;
     wc.lpszClassName = pClassName;
     wc.hIconSm = nullptr;
@@ -96,6 +122,18 @@ int CALLBACK WinMain(
     ShowWindow(hWnd,SW_SHOW);
     MSG msg; //New message instance
     BOOL gResult;
+
+    //Create new Graphics
+    graphics = new Graphics(); //Create new window
+    if (!graphics->Init(hWnd)) //Initialize graphics to window
+    {
+      delete graphics;
+      return -1; //Error exit
+    }
+
+    //Hide Cursor
+    ShowCursor(false);
+
     while ((gResult = GetMessage( &msg,nullptr,0,0)) > 0)
     {
       TranslateMessage( &msg );
