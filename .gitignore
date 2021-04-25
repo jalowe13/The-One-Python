@@ -9,3 +9,7 @@ The-One-Python/The-One-Python/Jacob.txt
 *.pyc
 The-One-Python/The-One-Python/__pycache__/basic_media.cpython-38.pyc
 The-One-Python/The-One-Python/game/data/saves/
+The-One-Python/The-One-Gui/build/
+The-One-Gui/build/
+The-One-Gui/main.exe - Shortcut.lnk
+The-One-Gui/WinMain.exe - Shortcut.lnk
