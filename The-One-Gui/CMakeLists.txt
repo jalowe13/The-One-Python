@@ -4,6 +4,7 @@ project(TheOne CXX)
 set(main_src
   WinMain.cpp
   Graphics.cpp Graphics.h
+  Ball.cpp	Ball.h
 )
 
 add_executable(WinMain ${main_src})

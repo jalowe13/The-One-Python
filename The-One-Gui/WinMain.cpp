@@ -20,12 +20,15 @@
 #include <string>
 
 //Graphics
-#include "Graphics.h"
+#include "Ball.h"
 
 Graphics* graphics;
+Ball* ball;
+
 
 float xPos = 0;
 float yPos = 0;
+int iMAX = 0;
 
 //Message Handling
 LRESULT CALLBACK WindowProc(
@@ -67,7 +70,14 @@ LRESULT CALLBACK WindowProc(
         {
         graphics->BeginDraw();
         graphics->ClearScreen(0.0f, 0.0, 0.0f);
+        //Cursor
         graphics->DrawCircle(xPos, yPos, 20, 1.0, 0.0, 0.0, 1.0);
+        // Others
+        ball->drawBall(graphics);
+        //for (int i = 0; i < iMAX; i++)
+        //{
+        //    graphics->DrawCircle(rand() % 1280, rand() % 600, 10, 100.0, 100.0, 100.0, 1.0);
+        //}
         graphics->EndDraw();
         break;
          }
@@ -78,6 +88,15 @@ LRESULT CALLBACK WindowProc(
         graphics->BeginDraw();
         graphics->ClearScreen(0.0f, 0.0, 0.0f);
         graphics->DrawCircle(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 20, 1.0, 0.0, 0.0, 1.0);
+
+        //Ball
+        ball->drawBall(graphics);
+
+        //for (int i = 0; i < iMAX; i++)
+        //{
+        //    graphics->DrawCircle(rand() % 1280, rand() % 600, 10, 100.0, 100.0, 100.0, 1.0);
+        //}
+        //iMAX = iMAX + 1;
         graphics->EndDraw();
         break;
     }
@@ -116,7 +135,7 @@ int CALLBACK WinMain(
       0,pClassName,
       "The One",
       WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
-      200,200,640,480,
+      200,200,1280,600,
       nullptr,nullptr,hInstance,nullptr
     );
     ShowWindow(hWnd,SW_SHOW);
@@ -133,6 +152,9 @@ int CALLBACK WinMain(
 
     //Hide Cursor
     ShowCursor(false);
+
+    //First instances
+    ball = new Ball(); //first ball
 
     while ((gResult = GetMessage( &msg,nullptr,0,0)) > 0)
     {

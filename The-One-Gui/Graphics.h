@@ -15,4 +15,5 @@ public:
 	void EndDraw() { renderTarget->EndDraw(); };
 	void ClearScreen(float r, float g, float b);
 	void DrawCircle(float x, float y, float rad, float r, float g, float b, float a);
+	void DrawFPS(float x, float y, float rad, float r, float g, float b, float a);
 };

@@ -42,3 +42,11 @@ void Graphics::DrawCircle(float x, float y, float rad, float r, float g, float b
     renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(x, y), rad, rad), brush, 2.0f);
     brush->Release();
 }
+
+void Graphics::DrawFPS(float x, float y, float rad, float r, float g, float b, float a)
+{
+    wchar_t* txt = L"Hello World";
+  IDWriteTextLayout* pTextLayout_;
+  ID2D1SolidColorBrush* brush; //Create new color brush
+  renderTarget->CreateSolidColorBrush(D2D1::ColorF(r, g, b, a), &brush);
+}
