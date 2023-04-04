@@ -1,0 +1,6 @@
+name=Spider
+level_base=1
+gold_base=5
+exp_base=5
+hp_base=3
+dmg_base=2
