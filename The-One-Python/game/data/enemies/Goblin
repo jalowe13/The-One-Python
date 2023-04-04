@@ -1,0 +1,6 @@
+name=Goblin
+level_base=1
+gold_base=30
+exp_base=20
+hp_base=10
+dmg_base=3

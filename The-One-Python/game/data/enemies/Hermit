@@ -1,0 +1,6 @@
+name=Hermit
+level_base=1
+gold_base=2
+exp_base=15
+hp_base=10
+dmg_base=5

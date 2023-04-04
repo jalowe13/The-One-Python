@@ -1,0 +1,10 @@
+hp=100
+max_hp=100
+gold=25
+bank_gold=0
+flee_gold=50
+town=1
+level=1
+max_cave_level=1
+equipped_weapon=Nothing
+dmg_base=1
