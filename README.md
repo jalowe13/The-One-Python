@@ -1,10 +1,16 @@
 # The-One-Python
-https://github.com/jalowe13/The-One-Python/
+Jacob Lowe
+
 Command Line Based Text Adventure Game
 Created In Python off of a concept made in 2010, ported into Python instead of Batch Script
 Implementations will include a town area, dungeon, and basic combat system, as well as randomly generated encounters
-Jacob Lowe
 
+-------------------
+NOTE
+-------------------
+- This repository is more or less a concept command line work for what will be going into the C++ version of the game.
+- More of the core mechanics are here but not the visuals.
+- Check TheOneSDL for the GUI development cycle here https://github.com/jalowe13/TheOneSDL
 -------------------
 Instructions
 -------------------
